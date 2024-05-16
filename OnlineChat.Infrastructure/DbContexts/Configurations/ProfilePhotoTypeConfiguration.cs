@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using OnlineChat.Domain.Entities;
 using System;
@@ -9,11 +10,12 @@ using System.Threading.Tasks;
 
 namespace OnlineChat.Infrastructure.DbContexts.Configurations
 {
-    public class MessageTypeConfiguration : IEntityTypeConfiguration<Message>
+    public class ProfilePhotoTypeConfiguration : IEntityTypeConfiguration<ProfilePhoto>
     {
-        public void Configure(EntityTypeBuilder<Message> builder)
+        public void Configure(EntityTypeBuilder<ProfilePhoto> builder)
         {
-            builder.HasKey(x => x.Id);
+            builder.HasKey(p => p.Id);
+            builder.HasIndex(x => x.PhotoName).IsUnique();
         }
     }
 }

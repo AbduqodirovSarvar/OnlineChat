@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using OnlineChat.Application.Abstractions;
 using OnlineChat.Application.Models;
+using OnlineChat.Application.UseCases.ToDoList;
 using OnlineChat.Domain.Exceptions;
 using System;
 using System.Collections.Generic;
@@ -12,20 +13,25 @@ using System.Threading.Tasks;
 
 namespace OnlineChat.Application.UseCases.Security
 {
-    public class RegisterCommandHandler(IAppDbContext context, IMapper mapper, IHashService hashService, IFileService fileService) 
+    public class RegisterCommandHandler(
+        IAppDbContext context,
+        IMapper mapper,
+        IHashService hashService,
+        IMediator mediator
+        ) 
         : IRequestHandler<RegisterCommand, UserViewModel>
     {
         private readonly IAppDbContext _context = context;
         private readonly IMapper _mapper = mapper;
         private readonly IHashService _hashService = hashService;
-        private readonly IFileService _fileService = fileService;
+        private readonly IMediator _mediator = mediator;
 
         public async Task<UserViewModel> Handle(RegisterCommand request, CancellationToken cancellationToken)
         {
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Email == request.Email, cancellationToken);
             if (user != null)
             {
-                throw new AlreadyExistsException($"user already exists with email: {user.Email}");
+                throw new AlreadyExistsException($"User already exists with email: {user.Email}");
             }
 
             user = new Domain.Entities.User()
@@ -37,13 +43,17 @@ namespace OnlineChat.Application.UseCases.Security
                 Role = Domain.Enums.UserRole.User
             };
 
-            /*if(request.Photo != null)
-            {
-                var photo = 
-            }*/
-
             await _context.Users.AddAsync(user, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
+
+            if(request.Photo != null)
+            {
+                await _mediator.Send(new CreateUserPhotoCommand()
+                {
+                    Id = user.Id,
+                    Photo = request.Photo
+                }, cancellationToken);
+            }
 
             return _mapper.Map<UserViewModel>(user);
         }

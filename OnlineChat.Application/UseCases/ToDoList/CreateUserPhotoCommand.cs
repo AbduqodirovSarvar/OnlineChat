@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace OnlineChat.Application.UseCases.ToDoList
 {
-    public class AddUserPhoto : IRequest<UserViewModel>
+    public class CreateUserPhotoCommand : IRequest<UserViewModel>
     {
         [Required]
         public Guid Id { get; set; }

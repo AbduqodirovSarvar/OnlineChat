@@ -9,11 +9,12 @@ using System.Threading.Tasks;
 
 namespace OnlineChat.Infrastructure.DbContexts.Configurations
 {
-    public class MessageTypeConfiguration : IEntityTypeConfiguration<Message>
+    public class ChatTypeConfiguration : IEntityTypeConfiguration<Chat>
     {
-        public void Configure(EntityTypeBuilder<Message> builder)
+        public void Configure(EntityTypeBuilder<Chat> builder)
         {
             builder.HasKey(x => x.Id);
+            builder.HasMany(x => x.Messages).WithOne(x => x.Chat).HasForeignKey(x => x.ChatId);
         }
     }
 }

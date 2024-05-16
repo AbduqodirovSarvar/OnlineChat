@@ -9,8 +9,8 @@ namespace OnlineChat.Application.Abstractions
 {
     public interface IFileService
     {
-        Task<Uri?> SaveFileAsync(IFormFile? uri);
-        Task RemoveFileAsync(string? url);
+        Task<string?> SaveFileAsync(IFormFile? uri);
+        Task RemoveFileAsync(string? fileName);
         Stream? GetFileByFileName(string fileName);
         public string GetFilePath(string fileName);
     }

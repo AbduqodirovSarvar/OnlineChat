@@ -52,7 +52,7 @@ namespace OnlineChat.Application.Services
             }
         }
 
-        public async Task<Uri?> SaveFileAsync(IFormFile? file)
+        public async Task<string?> SaveFileAsync(IFormFile? file)
         {
             if (file == null)
             {
@@ -67,7 +67,7 @@ namespace OnlineChat.Application.Services
                 await file.CopyToAsync(stream);
             }
 
-            return new Uri("https://api.portfolio.sarvarbekabduqodirov.uz/api/storage/" + fileName);
+            return fileName;
         }
 
         public Stream? GetFileByFileName(string fileName)

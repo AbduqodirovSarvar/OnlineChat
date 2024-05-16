@@ -1,16 +1,15 @@
 ﻿using MediatR;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace OnlineChat.Application.UseCases.ToDoList
 {
-    public class DeleteUserCommand : IRequest<bool>
+    public class DeleteUserPhotoCommand : IRequest<bool>
     {
-        [Required]
         public Guid Id { get; set; }
+        public string Name { get; set; } = null!;
     }
 }

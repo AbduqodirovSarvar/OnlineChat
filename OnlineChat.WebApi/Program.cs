@@ -1,3 +1,5 @@
+using OnlineChat.Application.ChatActions;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -7,6 +9,15 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(x =>
+    {
+        x.AllowAnyMethod()
+        .AllowAnyOrigin()
+        .AllowAnyHeader();
+    });
+});
 
 var app = builder.Build();
 
@@ -17,10 +28,13 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseCors();
+app.UseRouting();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
 
 app.MapControllers();
+app.MapHub<ChatHub>("/chat");
 
 app.Run();

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.SignalR;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using OnlineChat.Application.Abstractions;
 using OnlineChat.Domain.Entities;
@@ -9,11 +10,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OnlineChat.Application.Chat
+namespace OnlineChat.Application.ChatActions
 {
+    [Authorize]
     public class ChatHub(
         ICurrentUserService currentUserService,
-        IAppDbContext appDbContext ) : Hub
+        IAppDbContext appDbContext
+        ) : Hub
     {
         private readonly ICurrentUserService _currentUserService = currentUserService;
         private readonly IAppDbContext _context = appDbContext;
