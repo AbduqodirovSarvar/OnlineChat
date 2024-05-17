@@ -8,10 +8,9 @@ using System.Threading.Tasks;
 
 namespace OnlineChat.Application.UseCases.Security
 {
-    public class ForgotPasswordCommand : IRequest<bool>
+    public class SendConfirmationCodeCommand : IRequest<bool>
     {
         [Required]
-        [EmailAddress]
-        public string Email { get; set; } = default!;
+        public string Email { get; set; } = null!;
     }
 }

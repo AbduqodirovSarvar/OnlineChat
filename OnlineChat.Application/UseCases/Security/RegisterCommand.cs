@@ -17,9 +17,8 @@ namespace OnlineChat.Application.UseCases.Security
         public string LastName { get; set; } = string.Empty;
         [MailValidation]
         public string Email { get; set; } = null!;
+        public string ConfirmCode { get; set; } = null!;
         public string Password { get; set; } = null!;
         public string ConfirmPassword { get; set; } = null!;
-        public UserRole Role { get; set; }
-        public IFormFile? Photo { get; set; }
     }
 }

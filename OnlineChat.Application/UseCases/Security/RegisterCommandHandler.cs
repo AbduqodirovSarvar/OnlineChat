@@ -17,14 +17,14 @@ namespace OnlineChat.Application.UseCases.Security
         IAppDbContext context,
         IMapper mapper,
         IHashService hashService,
-        IMediator mediator
+        IEmailService emailService
         ) 
         : IRequestHandler<RegisterCommand, UserViewModel>
     {
         private readonly IAppDbContext _context = context;
         private readonly IMapper _mapper = mapper;
         private readonly IHashService _hashService = hashService;
-        private readonly IMediator _mediator = mediator;
+        private readonly IEmailService _emailService = emailService;
 
         public async Task<UserViewModel> Handle(RegisterCommand request, CancellationToken cancellationToken)
         {
@@ -32,6 +32,11 @@ namespace OnlineChat.Application.UseCases.Security
             if (user != null)
             {
                 throw new AlreadyExistsException($"User already exists with email: {user.Email}");
+            }
+
+            if(!_emailService.CheckEmailConfirmed(request.Email, request.ConfirmCode))
+            {
+                throw new NotFoundException("Email is not found");
             }
 
             user = new Domain.Entities.User()
@@ -45,15 +50,6 @@ namespace OnlineChat.Application.UseCases.Security
 
             await _context.Users.AddAsync(user, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);
-
-            if(request.Photo != null)
-            {
-                await _mediator.Send(new CreateUserPhotoCommand()
-                {
-                    Id = user.Id,
-                    Photo = request.Photo
-                }, cancellationToken);
-            }
 
             return _mapper.Map<UserViewModel>(user);
         }

@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
 using OnlineChat.Application.Abstractions;
-using OnlineChat.Application.Chat;
+using OnlineChat.Application.Mappings;
+using OnlineChat.Application.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +15,21 @@ namespace OnlineChat.Application
     {
         public static IServiceCollection DepencyInjectionApplication(this IServiceCollection services)
         {
-            services.AddScoped<ICurrentUserService, ICurrentUserService>();
+            services.AddHttpContextAccessor();
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
+            services.AddMediatR(cfg =>
+            {
+                cfg.RegisterServicesFromAssembly(typeof(DepencyInjection).Assembly);
+            });
+            services.AddScoped<IFileService, FileService>();
+            services.AddScoped<IEmailService, EmailService>();
+            var mappingconfig = new MapperConfiguration(x =>
+            {
+                x.AddProfile(new MappingProfile());
+            });
+
+            IMapper mapper = mappingconfig.CreateMapper();
+            services.AddSingleton(mapper);
             return services;
         }
     }

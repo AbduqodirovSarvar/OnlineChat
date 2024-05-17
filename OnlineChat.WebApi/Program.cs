@@ -1,4 +1,9 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using OnlineChat.Application;
 using OnlineChat.Application.ChatActions;
+using OnlineChat.Infrastructure;
+using OnlineChat.Infrastructure.DbContexts;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.DepencyInjectionApplication();
+builder.Services.DepencyInjectionInfrastructure(builder.Configuration);
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
 builder.Services.AddCors(options =>
@@ -17,6 +24,42 @@ builder.Services.AddCors(options =>
         .AllowAnyOrigin()
         .AllowAnyHeader();
     });
+});
+
+builder.Services.AddSwaggerGen(options =>
+{
+    options.SwaggerDoc("v1", new OpenApiInfo()
+    {
+        Version = "v1",
+        Title = "My Portfolio",
+        Description = "My portfolio website's backend"
+    });
+
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+    {
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Authorization",
+        Type = SecuritySchemeType.Http
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement()
+    {
+        {
+            new OpenApiSecurityScheme()
+                {
+                    Reference = new OpenApiReference()
+                    {
+                        Id = "Bearer",
+                        Type = ReferenceType.SecurityScheme
+                    }
+                },
+            new List<string>()
+        }
+
+    });
+
 });
 
 var app = builder.Build();
@@ -31,8 +74,22 @@ if (app.Environment.IsDevelopment())
 app.UseCors();
 app.UseRouting();
 app.UseHttpsRedirection();
-
+app.UseAuthentication();
 app.UseAuthorization();
+
+// Apply migrations on startup
+using var scope = app.Services.CreateScope();
+var services = scope.ServiceProvider;
+var context = services.GetRequiredService<AppDbContext>();
+try
+{
+    context.Database.Migrate();
+    Console.WriteLine("Migrations applying successfully completed");
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Error applying migrations: {ex.Message}");
+}
 
 app.MapControllers();
 app.MapHub<ChatHub>("/chat");

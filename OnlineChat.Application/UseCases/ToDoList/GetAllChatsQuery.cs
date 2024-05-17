@@ -8,8 +8,8 @@ using System.Threading.Tasks;
 
 namespace OnlineChat.Application.UseCases.ToDoList
 {
-    public class GetAllChatsCommand : IRequest<List<Chat>>
+    public class GetAllChatsQuery : IRequest<List<Chat>>
     {
-        public GetAllChatsCommand() { }
+        public GetAllChatsQuery() { }
     }
 }

@@ -19,11 +19,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "external", "external", "{18
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "back", "back", "{EC5032A1-24F7-416E-B288-29576F278DE1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineChat.Infrastructure", "OnlineChat.Infrastructure\OnlineChat.Infrastructure.csproj", "{E7C8C9A9-BD7C-4813-9C3C-96C0671889F6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineChat.Infrastructure", "OnlineChat.Infrastructure\OnlineChat.Infrastructure.csproj", "{E7C8C9A9-BD7C-4813-9C3C-96C0671889F6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineChat.Presentation", "OnlineChat.Presentation\OnlineChat.Presentation.csproj", "{25BBBBDF-6111-4022-BE20-8EE0F9D4197F}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineChat.WebApi", "OnlineChat.WebApi\OnlineChat.WebApi.csproj", "{4334022A-299B-474B-9C54-BE88F0C71F70}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineChat.WebApi", "OnlineChat.WebApi\OnlineChat.WebApi.csproj", "{4334022A-299B-474B-9C54-BE88F0C71F70}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,10 +45,6 @@ Global
 		{E7C8C9A9-BD7C-4813-9C3C-96C0671889F6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7C8C9A9-BD7C-4813-9C3C-96C0671889F6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7C8C9A9-BD7C-4813-9C3C-96C0671889F6}.Release|Any CPU.Build.0 = Release|Any CPU
-		{25BBBBDF-6111-4022-BE20-8EE0F9D4197F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{25BBBBDF-6111-4022-BE20-8EE0F9D4197F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{25BBBBDF-6111-4022-BE20-8EE0F9D4197F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{25BBBBDF-6111-4022-BE20-8EE0F9D4197F}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4334022A-299B-474B-9C54-BE88F0C71F70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4334022A-299B-474B-9C54-BE88F0C71F70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4334022A-299B-474B-9C54-BE88F0C71F70}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -68,7 +62,6 @@ Global
 		{189569CE-1771-4ECF-A107-EB7CF70E760F} = {EC5032A1-24F7-416E-B288-29576F278DE1}
 		{EC5032A1-24F7-416E-B288-29576F278DE1} = {B835466B-A85E-44D6-97CC-75231C261945}
 		{E7C8C9A9-BD7C-4813-9C3C-96C0671889F6} = {189569CE-1771-4ECF-A107-EB7CF70E760F}
-		{25BBBBDF-6111-4022-BE20-8EE0F9D4197F} = {189569CE-1771-4ECF-A107-EB7CF70E760F}
 		{4334022A-299B-474B-9C54-BE88F0C71F70} = {EC5032A1-24F7-416E-B288-29576F278DE1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution

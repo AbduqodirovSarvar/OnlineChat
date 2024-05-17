@@ -14,6 +14,8 @@ namespace OnlineChat.Application.Services
     {
         private static readonly Dictionary<string, string> ConfirmationCodes = [];
 
+        private readonly string userName = "abduqodirovsarvar.2002@gmail.com";
+        private readonly string appPassword = "hgjb mvzo nuji fcwb";
         public bool CheckEmailConfirmed(string email, string confirmationCode)
         {
             if (ConfirmationCodes[email] == confirmationCode.ToString())
@@ -46,7 +48,7 @@ namespace OnlineChat.Application.Services
             using var smtp = new SmtpClient("smtp.gmail.com")
             {
                 Port = 587,
-                Credentials = new NetworkCredential("abduqodirovsarvar.2002@gmail.com", "admn bmya epht guch"),
+                Credentials = new NetworkCredential(userName, appPassword),
                 EnableSsl = true,
             };
 
@@ -63,10 +65,21 @@ namespace OnlineChat.Application.Services
             }
         }
 
-        public async Task<bool> SendEmailConfirmed(string email)
+        public async Task<bool> SendEmailConfirmForResetPassword(string email)
         {
             int confirmationCode = RandomNumberGenerator.GetInt32(10000, 99999);
             if (await SendEmail(email, "Confirmation Code for reset password", confirmationCode.ToString()))
+            {
+                ConfirmationCodes.Add(email, confirmationCode.ToString());
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<bool> SendEmailConfirm(string email)
+        {
+            int confirmationCode = RandomNumberGenerator.GetInt32(10000, 99999);
+            if (await SendEmail(email, "Confirma your email address", confirmationCode.ToString()))
             {
                 ConfirmationCodes.Add(email, confirmationCode.ToString());
                 return true;
