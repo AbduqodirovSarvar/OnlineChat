@@ -12,19 +12,6 @@ namespace OnlineChat.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "Chats",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Chats", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -34,6 +21,7 @@ namespace OnlineChat.Infrastructure.Migrations
                     Email = table.Column<string>(type: "text", nullable: false),
                     PasswordHash = table.Column<string>(type: "text", nullable: false),
                     Role = table.Column<int>(type: "integer", nullable: false),
+                    PhotoName = table.Column<string>(type: "text", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
@@ -48,7 +36,7 @@ namespace OnlineChat.Infrastructure.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     SenderId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ChatId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ReceiverId = table.Column<Guid>(type: "uuid", nullable: false),
                     Msg = table.Column<string>(type: "text", nullable: false),
                     IsSeen = table.Column<bool>(type: "boolean", nullable: false),
                     SeenAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
@@ -59,9 +47,9 @@ namespace OnlineChat.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_Messages", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Messages_Chats_ChatId",
-                        column: x => x.ChatId,
-                        principalTable: "Chats",
+                        name: "FK_Messages_Users_ReceiverId",
+                        column: x => x.ReceiverId,
+                        principalTable: "Users",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
@@ -72,52 +60,20 @@ namespace OnlineChat.Infrastructure.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
-            migrationBuilder.CreateTable(
-                name: "Photos",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    PhotoName = table.Column<string>(type: "text", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Photos", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Photos_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "CreatedAt", "Email", "FirstName", "IsDeleted", "LastName", "PasswordHash", "Role" },
-                values: new object[] { new Guid("0e897d4d-7755-4e8c-b830-4f42e93e2d9d"), new DateTime(2024, 5, 16, 23, 43, 56, 89, DateTimeKind.Utc).AddTicks(2330), "abduqodirovsarvar.2002@gmail.com", "SuperAdmin", false, "SuperAdmin", "ZG252FGyMRbSbeZbDrhE3yug8+8aAtEY2dls564VCKUnMb0Zgotqd6Fp7BQgpSBrRRsyjSO90+qQfD7HloJl+g==", 3 });
+                columns: new[] { "Id", "CreatedAt", "Email", "FirstName", "IsDeleted", "LastName", "PasswordHash", "PhotoName", "Role" },
+                values: new object[] { new Guid("a888bbd0-7059-4a5b-b057-1069246ef7f8"), new DateTime(2024, 5, 23, 14, 3, 32, 731, DateTimeKind.Utc).AddTicks(28), "abduqodirovsarvar.2002@gmail.com", "SuperAdmin", false, "SuperAdmin", "mgub682wLvVoFShP2yuP72G7qYggK/T52lmH7WZKRK2kC7pKVdSQUZIEZXeSlho8S92YgMSFQlRyia0UTYJ/Kg==", null, 3 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Messages_ChatId",
+                name: "IX_Messages_ReceiverId",
                 table: "Messages",
-                column: "ChatId");
+                column: "ReceiverId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Messages_SenderId",
                 table: "Messages",
                 column: "SenderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Photos_PhotoName",
-                table: "Photos",
-                column: "PhotoName",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Photos_UserId",
-                table: "Photos",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Users_Email",
@@ -131,12 +87,6 @@ namespace OnlineChat.Infrastructure.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Messages");
-
-            migrationBuilder.DropTable(
-                name: "Photos");
-
-            migrationBuilder.DropTable(
-                name: "Chats");
 
             migrationBuilder.DropTable(
                 name: "Users");

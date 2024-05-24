@@ -17,8 +17,8 @@ namespace OnlineChat.Domain.Entities
         public string Email { get; set; } = null!;
         public string PasswordHash { get; set; } = null!;
         public UserRole Role { get; set; } = UserRole.User;
-        public ICollection<ProfilePhoto> Photos { get; set; } = new HashSet<ProfilePhoto>();
-        public ICollection<Message> Messages { get; set; } = new HashSet<Message>();
-        public ICollection<Chat> Chats { get; set; } = new List<Chat>();
+        public string? PhotoName { get; set; }
+        public ICollection<Message> SentMessages { get; set; } = new HashSet<Message>();
+        public ICollection<Message> ReceivedMessages { get; set; } = new HashSet<Message>();
     }
 }

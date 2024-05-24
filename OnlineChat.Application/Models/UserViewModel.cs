@@ -19,7 +19,6 @@ namespace OnlineChat.Application.Models
         public EnumViewModel Role { get; set; } = null!;
         public DateTime CreatedAt { get; set; }
         public bool IsDeleted { get; set; }
-        public ICollection<Message> Messages { get; set; } = new List<Message>();
-        public ICollection<ProfilePhoto> Photos { get; set; } = new List<ProfilePhoto>();
+        public ICollection<MessageViewModel> Messages { get; set; } = new List<MessageViewModel>();
     }
 }

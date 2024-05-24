@@ -15,9 +15,9 @@ namespace OnlineChat.Application.Mappings
         public MappingProfile() 
         {
             CreateMap<User, UserViewModel>()
-                .ForMember(x => x.Messages, y => y.MapFrom(z => z.Messages))
-                .ForMember(x => x.Photos, y => y.MapFrom(z => z.Photos))
+                .ForMember(x => x.Role, y => y.MapFrom(z => z.Role))
                 .ReverseMap();
+
             CreateMap<UserRole, EnumViewModel>()
                 .ForMember(x => x.Id, y => y.MapFrom(z => ((int)z)))
                 .ForMember(x => x.Name, y => y.MapFrom(z => z.ToString()))

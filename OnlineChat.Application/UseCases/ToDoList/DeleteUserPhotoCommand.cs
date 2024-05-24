@@ -10,6 +10,5 @@ namespace OnlineChat.Application.UseCases.ToDoList
     public class DeleteUserPhotoCommand : IRequest<bool>
     {
         public Guid Id { get; set; }
-        public string Name { get; set; } = null!;
     }
 }

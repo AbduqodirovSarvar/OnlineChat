@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Http;
 using OnlineChat.Application.Models;
 using OnlineChat.Domain.Behaviours;
 using OnlineChat.Domain.Enums;
@@ -17,5 +18,6 @@ namespace OnlineChat.Application.UseCases.ToDoList
         public Guid Id { get; set; }
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
+        public IFormFile? Photo { get; set; }
     }
 }

@@ -23,8 +23,10 @@ namespace OnlineChat.Application.UseCases.ToDoList
         private readonly ICurrentUserService _currentUserService = currentUserService;
         public async Task<List<UserViewModel>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {
-            var currentUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == _currentUserService.UserId, cancellationToken)
-                                                  ?? throw new NotFoundException("Current User not found");
+            var currentUser = await _context.Users
+                                            .Where(x => !x.IsDeleted)
+                                            .FirstOrDefaultAsync(x => x.Id == _currentUserService.UserId, cancellationToken)
+                                            ?? throw new NotFoundException("Current User not found");
 
             if(!(currentUser.Role == Domain.Enums.UserRole.Admin || currentUser.Role == Domain.Enums.UserRole.SuperAdmin))
             {

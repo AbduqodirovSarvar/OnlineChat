@@ -12,11 +12,13 @@ namespace OnlineChat.Application.UseCases.ToDoList
 {
     public class DeleteUserCommandHandler(
         IAppDbContext dbContext,
-        ICurrentUserService currentUser
+        ICurrentUserService currentUser,
+        IFileService fileService
         ) : IRequestHandler<DeleteUserCommand, bool>
     {
         private readonly IAppDbContext _context = dbContext;
         private readonly ICurrentUserService _currentUserService = currentUser;
+        private readonly IFileService _fileService = fileService;
         public async Task<bool> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
         {
             var currentUser = await _context.Users
@@ -29,9 +31,15 @@ namespace OnlineChat.Application.UseCases.ToDoList
             {
                 throw new Exception("Access denied");
             }
+
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken)
                                            ?? throw new NotFoundException();
 
+            if(user.PhotoName != null)
+            {
+                await _fileService.RemoveFileAsync(user.PhotoName);
+                user.PhotoName = null;
+            }
             user.IsDeleted = true;
             
             return (await _context.SaveChangesAsync(cancellationToken)) > 0;

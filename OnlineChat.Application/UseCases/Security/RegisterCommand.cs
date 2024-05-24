@@ -20,5 +20,6 @@ namespace OnlineChat.Application.UseCases.Security
         public string ConfirmCode { get; set; } = null!;
         public string Password { get; set; } = null!;
         public string ConfirmPassword { get; set; } = null!;
+        public IFormFile? Photo { get; set; }
     }
 }

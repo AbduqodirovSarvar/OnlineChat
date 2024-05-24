@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OnlineChat.Application.UseCases.ToDoList;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace OnlineChat.WebApi.Controllers
 {
@@ -14,8 +13,74 @@ namespace OnlineChat.WebApi.Controllers
     {
         private readonly IMediator _mediator = mediator;
 
-        [HttpPost("photo")]
-        public async Task<IActionResult> AddPhoto([FromForm] CreateUserPhotoCommand command)
+        [HttpGet]
+        public async Task<IActionResult> GetUser([FromQuery] GetUserQuery query)
+        {
+            try
+            {
+                return Ok(await _mediator.Send(query));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("me")]
+        public async Task<IActionResult> GetMe()
+        {
+            try
+            {
+                return Ok(await _mediator.Send(new GetCurrentUserQuery()));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("all-users")]
+        public async Task<IActionResult> GetAllUsers()
+        {
+            try
+            {
+                return Ok(await _mediator.Send(new GetAllUsersQuery()));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand command)
+        {
+            try
+            {
+                return Ok(await _mediator.Send(command));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+
+        [HttpGet("my-chats")]
+        public async Task<IActionResult> GetAllChats()
+        {
+            try
+            {
+                return Ok(await _mediator.Send(new GetAllChatsQuery()));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpGet("chat-messages")]
+        public async Task<IActionResult> GetMessages([FromQuery] GetAllMessagesForTheChatQuery command)
         {
             try
             {
@@ -52,45 +117,5 @@ namespace OnlineChat.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-        [HttpGet("chats")]
-        public async Task<IActionResult> GetAllChats()
-        {
-            try
-            {
-                return Ok(await _mediator.Send(new GetAllChatsQuery()));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpGet("all-users")]
-        public async Task<IActionResult> GetAllUsers()
-        {
-            try
-            {
-                return Ok(await _mediator.Send(new GetAllUsersQuery()));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetUser([FromQuery] GetUserQuery query)
-        {
-            try
-            {
-                return Ok(await _mediator.Send(query));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-        
     }
 }

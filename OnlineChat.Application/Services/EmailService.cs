@@ -16,6 +16,7 @@ namespace OnlineChat.Application.Services
 
         private readonly string userName = "abduqodirovsarvar.2002@gmail.com";
         private readonly string appPassword = "hgjb mvzo nuji fcwb";
+
         public bool CheckEmailConfirmed(string email, string confirmationCode)
         {
             if (ConfirmationCodes[email] == confirmationCode.ToString())

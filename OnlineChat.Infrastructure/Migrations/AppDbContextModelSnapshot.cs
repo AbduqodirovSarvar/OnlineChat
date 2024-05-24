@@ -22,30 +22,10 @@ namespace OnlineChat.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("OnlineChat.Domain.Entities.Chat", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Chats");
-                });
-
             modelBuilder.Entity("OnlineChat.Domain.Entities.Message", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("ChatId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedAt")
@@ -61,6 +41,9 @@ namespace OnlineChat.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<Guid>("ReceiverId")
+                        .HasColumnType("uuid");
+
                     b.Property<DateTime>("SeenAt")
                         .HasColumnType("timestamp with time zone");
 
@@ -69,40 +52,11 @@ namespace OnlineChat.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ChatId");
+                    b.HasIndex("ReceiverId");
 
                     b.HasIndex("SenderId");
 
                     b.ToTable("Messages");
-                });
-
-            modelBuilder.Entity("OnlineChat.Domain.Entities.ProfilePhoto", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("timestamp with time zone");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<string>("PhotoName")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PhotoName")
-                        .IsUnique();
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Photos");
                 });
 
             modelBuilder.Entity("OnlineChat.Domain.Entities.User", b =>
@@ -133,6 +87,9 @@ namespace OnlineChat.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
+                    b.Property<string>("PhotoName")
+                        .HasColumnType("text");
+
                     b.Property<int>("Role")
                         .HasColumnType("integer");
 
@@ -146,57 +103,41 @@ namespace OnlineChat.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("0e897d4d-7755-4e8c-b830-4f42e93e2d9d"),
-                            CreatedAt = new DateTime(2024, 5, 16, 23, 43, 56, 89, DateTimeKind.Utc).AddTicks(2330),
+                            Id = new Guid("a888bbd0-7059-4a5b-b057-1069246ef7f8"),
+                            CreatedAt = new DateTime(2024, 5, 23, 14, 3, 32, 731, DateTimeKind.Utc).AddTicks(28),
                             Email = "abduqodirovsarvar.2002@gmail.com",
                             FirstName = "SuperAdmin",
                             IsDeleted = false,
                             LastName = "SuperAdmin",
-                            PasswordHash = "ZG252FGyMRbSbeZbDrhE3yug8+8aAtEY2dls564VCKUnMb0Zgotqd6Fp7BQgpSBrRRsyjSO90+qQfD7HloJl+g==",
+                            PasswordHash = "mgub682wLvVoFShP2yuP72G7qYggK/T52lmH7WZKRK2kC7pKVdSQUZIEZXeSlho8S92YgMSFQlRyia0UTYJ/Kg==",
                             Role = 3
                         });
                 });
 
             modelBuilder.Entity("OnlineChat.Domain.Entities.Message", b =>
                 {
-                    b.HasOne("OnlineChat.Domain.Entities.Chat", "Chat")
-                        .WithMany("Messages")
-                        .HasForeignKey("ChatId")
+                    b.HasOne("OnlineChat.Domain.Entities.User", "Receiver")
+                        .WithMany("ReceivedMessages")
+                        .HasForeignKey("ReceiverId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("OnlineChat.Domain.Entities.User", "Sender")
-                        .WithMany("Messages")
+                        .WithMany("SentMessages")
                         .HasForeignKey("SenderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Chat");
+                    b.Navigation("Receiver");
 
                     b.Navigation("Sender");
                 });
 
-            modelBuilder.Entity("OnlineChat.Domain.Entities.ProfilePhoto", b =>
-                {
-                    b.HasOne("OnlineChat.Domain.Entities.User", "User")
-                        .WithMany("Photos")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("OnlineChat.Domain.Entities.Chat", b =>
-                {
-                    b.Navigation("Messages");
-                });
-
             modelBuilder.Entity("OnlineChat.Domain.Entities.User", b =>
                 {
-                    b.Navigation("Messages");
+                    b.Navigation("ReceivedMessages");
 
-                    b.Navigation("Photos");
+                    b.Navigation("SentMessages");
                 });
 #pragma warning restore 612, 618
         }

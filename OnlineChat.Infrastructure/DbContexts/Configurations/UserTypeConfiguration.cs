@@ -16,8 +16,8 @@ namespace OnlineChat.Infrastructure.DbContexts.Configurations
         {
             builder.HasKey(x => x.Id);
             builder.HasIndex(x => x.Email).IsUnique();
-            builder.HasMany(x => x.Photos).WithOne(x => x.User).HasForeignKey(x => x.UserId);
-            builder.HasMany(x => x.Messages).WithOne(x => x.Sender).HasForeignKey(x => x.SenderId);
+            builder.HasMany(x => x.SentMessages).WithOne(x => x.Sender).HasForeignKey(x => x.SenderId);
+            builder.HasMany(x => x.ReceivedMessages).WithOne(x => x.Receiver).HasForeignKey(x => x.ReceiverId);
             builder.HasData(new User()
             {
                 FirstName = "SuperAdmin",

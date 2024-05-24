@@ -31,15 +31,16 @@ namespace OnlineChat.Application.UseCases.ToDoList
             {
                 throw new Exception("Access denied");
             }
-            var user = await _context.Users.Include(x => x.Photos)
-                                           .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken)
+            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken)
                                            ?? throw new NotFoundException();
 
-            var photo = await _context.Photos.FirstOrDefaultAsync(x => x.PhotoName == request.Name, cancellationToken)
-                                             ?? throw new NotFoundException("Photo was not found");
+            if(user.PhotoName == null)
+            {
+                return false;
+            }
 
-            await _fileService.RemoveFileAsync(photo.PhotoName);
-            photo.IsDeleted = true;
+            await _fileService.RemoveFileAsync(user.PhotoName);
+            user.PhotoName = null;
 
             return (await _context.SaveChangesAsync(cancellationToken)) > 0;
         }

@@ -22,7 +22,7 @@ namespace OnlineChat.Application
                 cfg.RegisterServicesFromAssembly(typeof(DepencyInjection).Assembly);
             });
             services.AddScoped<IFileService, FileService>();
-            services.AddScoped<IEmailService, EmailService>();
+            services.AddSingleton<IEmailService, EmailService>();
             var mappingconfig = new MapperConfiguration(x =>
             {
                 x.AddProfile(new MappingProfile());

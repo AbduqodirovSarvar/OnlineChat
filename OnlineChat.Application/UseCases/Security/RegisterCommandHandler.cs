@@ -17,7 +17,8 @@ namespace OnlineChat.Application.UseCases.Security
         IAppDbContext context,
         IMapper mapper,
         IHashService hashService,
-        IEmailService emailService
+        IEmailService emailService,
+        IFileService fileService
         ) 
         : IRequestHandler<RegisterCommand, UserViewModel>
     {
@@ -25,6 +26,7 @@ namespace OnlineChat.Application.UseCases.Security
         private readonly IMapper _mapper = mapper;
         private readonly IHashService _hashService = hashService;
         private readonly IEmailService _emailService = emailService;
+        private readonly IFileService _fileService = fileService;
 
         public async Task<UserViewModel> Handle(RegisterCommand request, CancellationToken cancellationToken)
         {
@@ -47,6 +49,11 @@ namespace OnlineChat.Application.UseCases.Security
                 PasswordHash = _hashService.GetHash(request.Password),
                 Role = Domain.Enums.UserRole.User
             };
+
+            if(request.Photo != null)
+            {
+                user.PhotoName = await _fileService.SaveFileAsync(request.Photo);
+            }
 
             await _context.Users.AddAsync(user, cancellationToken);
             await _context.SaveChangesAsync(cancellationToken);

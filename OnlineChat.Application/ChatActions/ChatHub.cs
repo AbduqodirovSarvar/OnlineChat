@@ -1,71 +1,58 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
-using OnlineChat.Application.Abstractions;
-using OnlineChat.Domain.Entities;
-using OnlineChat.Domain.Exceptions;
+﻿using Microsoft.AspNetCore.SignalR;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OnlineChat.Application.ChatActions
 {
-    [Authorize]
-    public class ChatHub(
-        ICurrentUserService currentUserService,
-        IAppDbContext appDbContext
-        ) : Hub
+    // [Authorize] // Uncomment this line if you want to require authorization
+    public class ChatHub : Hub
     {
-        private readonly ICurrentUserService _currentUserService = currentUserService;
-        private readonly IAppDbContext _context = appDbContext;
+        private readonly static Dictionary<string, User> _users = [];
 
-        public async Task JoinRoom(Guid roomId)
+        public async Task SendMessage(string message)
         {
-            await Groups.AddToGroupAsync(_currentUserService.UserId.ToString(), roomId.ToString());
-            await Clients.Group(roomId.ToString()).SendAsync("ReceiveMessage", $"User joined with identifier {_currentUserService.UserId}");
-            return;
+            Console.WriteLine("Test message received");
+            await Clients.User("test").SendAsync(message);
+            await Clients.All.SendAsync("ReceiveMessage", message);
         }
 
-        public async Task SendMessage(Message message)
+        public async Task Register(User user)
         {
-            try
-            {
-                await Groups.AddToGroupAsync(_currentUserService.UserId.ToString(), message.Id.ToString());
-                Console.WriteLine($"User joined to this room which identifier is {message.Id}");
-            }
-            catch 
-            {
-                Console.WriteLine($"User already joined to this room which identifier is {message.Id}");
-            }
-            
-            await Clients.Group(message.Id.ToString()).SendAsync("ReceiveMessage", message);
-            return;
+            var id = this.Context.ConnectionId;
+
+            if (_users.ContainsKey(id))
+                return;
+
+            _users.Add(id, user);
+            await Clients.Others.SendAsync("Connected", user);
+
+            var msg = "A new user has joined the chat";
+            await Clients.Others.SendAsync("ReceiveMessage", msg);
+            await Clients.Others.SendAsync("Connected", user);
         }
 
-        public async Task SendConnectionUser(Guid roomId)
+        public IEnumerable<User> GetOnlineUsers()
         {
-            var user = await _context.Users
-                                     .FirstOrDefaultAsync(x => x.Id == _currentUserService.UserId)
-                                     ?? throw new NotFoundException("User");
-
-            await Clients.Group(roomId.ToString()).SendAsync("ConnectedUser", user);
-            return;
+            return _users.Values;
         }
 
         public override async Task OnDisconnectedAsync(Exception? exception)
         {
-            var user = await _context.Users
-                                     .FirstOrDefaultAsync(x => x.Id == _currentUserService.UserId);
-            if(user == null)
-            {
-                await base.OnDisconnectedAsync(exception);
-                return;
-            }
+            var id = this.Context.ConnectionId;
+            if (!_users.TryGetValue(id, out User? user))
+                user = User.Unknown();
 
-            await base.OnDisconnectedAsync(exception);
-            return;
+            _users.Remove(id);
+            var msg = "A user has left the chat";
+            await Clients.Others.SendAsync("ReceiveMessage", msg);
+            await Clients.Others.SendAsync("Disconnected", user);
         }
+    }
+
+    public class User(string name)
+    {
+        public string Name { get; set; } = name;
+        public static User Unknown() => new("[unknown]");
     }
 }

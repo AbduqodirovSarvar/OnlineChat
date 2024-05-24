@@ -17,8 +17,6 @@ namespace OnlineChat.Infrastructure.DbContexts
 
         public DbSet<User> Users { get; set; }
         public DbSet<Message> Messages { get; set; }
-        public DbSet<ProfilePhoto> Photos { get; set; }
-        public DbSet<Chat> Chats { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -34,8 +32,6 @@ namespace OnlineChat.Infrastructure.DbContexts
                 Console.WriteLine("HashService is not registered in the service provider!");
             }
             modelBuilder.ApplyConfiguration(new MessageTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new ProfilePhotoTypeConfiguration());
-            modelBuilder.ApplyConfiguration(new ChatTypeConfiguration());
         }
     }
 }

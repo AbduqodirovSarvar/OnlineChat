@@ -16,12 +16,14 @@ namespace OnlineChat.Application.UseCases.ToDoList
     public class UpdateUserCommandHandler(
         IAppDbContext dbContext,
         IMapper mapper,
-        ICurrentUserService currentUserService
+        ICurrentUserService currentUserService,
+        IFileService fileService
         ) : IRequestHandler<UpdateUserCommand, UserViewModel>
     {
         private readonly IMapper _mapper = mapper;
         private readonly ICurrentUserService _currentUserService = currentUserService;
         private readonly IAppDbContext _context = dbContext;
+        private readonly IFileService _fileService = fileService;
         public async Task<UserViewModel> Handle(UpdateUserCommand request, CancellationToken cancellationToken)
         {
             var currentUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == _currentUserService.UserId, cancellationToken)
@@ -39,6 +41,11 @@ namespace OnlineChat.Application.UseCases.ToDoList
 
             user.FirstName = request.FirstName ?? user.FirstName;
             user.LastName = request.LastName ?? user.LastName;
+            if(request.Photo != null)
+            {
+                await _fileService.RemoveFileAsync(user.PhotoName);
+                user.PhotoName = await _fileService.SaveFileAsync(request.Photo);
+            }
 
             await _context.SaveChangesAsync(cancellationToken);
 

@@ -25,7 +25,7 @@ namespace OnlineChat.WebApi.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromBody] RegisterCommand command)
+        public async Task<IActionResult> Register([FromForm] RegisterCommand command)
         {
             try
             {

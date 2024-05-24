@@ -16,13 +16,15 @@ builder.Services.DepencyInjectionApplication();
 builder.Services.DepencyInjectionInfrastructure(builder.Configuration);
 builder.Services.AddSwaggerGen();
 builder.Services.AddSignalR();
+builder.Services.AddSignalR();
 builder.Services.AddCors(options =>
 {
-    options.AddDefaultPolicy(x =>
+    options.AddDefaultPolicy(builder =>
     {
-        x.AllowAnyMethod()
-        .AllowAnyOrigin()
-        .AllowAnyHeader();
+        builder.WithOrigins("http://localhost:4200")
+               .AllowAnyHeader()
+               .AllowAnyMethod()
+               .AllowCredentials();
     });
 });
 
@@ -90,8 +92,14 @@ catch (Exception ex)
 {
     Console.WriteLine($"Error applying migrations: {ex.Message}");
 }
+app.UseDeveloperExceptionPage();
+
+app.UseEndpoints(endpoints =>
+{
+    endpoints.MapHub<ChatHub>("/chat");
+});
 
 app.MapControllers();
-app.MapHub<ChatHub>("/chat");
+/*app.MapHub<ChatHub>("/chat");*/
 
 app.Run();
