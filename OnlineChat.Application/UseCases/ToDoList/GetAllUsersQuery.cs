@@ -11,5 +11,11 @@ namespace OnlineChat.Application.UseCases.ToDoList
     public class GetAllUsersQuery : IRequest<List<UserViewModel>>
     {
         public GetAllUsersQuery() { }
+        public GetAllUsersQuery(string? text)
+        {
+            Text = text;
+        }
+
+        public string? Text = null;
     }
 }

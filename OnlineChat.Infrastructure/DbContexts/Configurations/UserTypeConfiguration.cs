@@ -18,14 +18,32 @@ namespace OnlineChat.Infrastructure.DbContexts.Configurations
             builder.HasIndex(x => x.Email).IsUnique();
             builder.HasMany(x => x.SentMessages).WithOne(x => x.Sender).HasForeignKey(x => x.SenderId);
             builder.HasMany(x => x.ReceivedMessages).WithOne(x => x.Receiver).HasForeignKey(x => x.ReceiverId);
-            builder.HasData(new User()
-            {
+            builder.HasData(
+                new User()
+                {
                 FirstName = "SuperAdmin",
                 LastName = "SuperAdmin",
                 PasswordHash = hashService.GetHash("Sarvar.12345"),
                 Email = "abduqodirovsarvar.2002@gmail.com",
                 Role = Domain.Enums.UserRole.SuperAdmin
-            });
+                },
+                new User()
+                {
+                    FirstName = "User1 firstname",
+                    LastName = "User1 lastname",
+                    PasswordHash = hashService.GetHash("Sarvar.12345"),
+                    Email = "user1@gmail.com",
+                    Role = Domain.Enums.UserRole.User
+                },
+                new User()
+                {
+                    FirstName = "User2 firstname",
+                    LastName = "user2 lastname",
+                    PasswordHash = hashService.GetHash("Sarvar.12345"),
+                    Email = "user2@gmail.com",
+                    Role = Domain.Enums.UserRole.User
+                }
+                );
         }
     }
 }

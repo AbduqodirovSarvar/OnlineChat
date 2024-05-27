@@ -28,9 +28,19 @@ namespace OnlineChat.Application.UseCases.ToDoList
                                             .FirstOrDefaultAsync(x => x.Id == _currentUserService.UserId, cancellationToken)
                                             ?? throw new NotFoundException("Current User not found");
 
-            if(!(currentUser.Role == Domain.Enums.UserRole.Admin || currentUser.Role == Domain.Enums.UserRole.SuperAdmin))
+            /*
+                        if(!(currentUser.Role == Domain.Enums.UserRole.Admin || currentUser.Role == Domain.Enums.UserRole.SuperAdmin))
+                        {
+                            throw new Exception("Access denied");
+                        }*/
+
+            if (request.Text != null)
             {
-                throw new Exception("Access denied");
+                return _mapper.Map<List<UserViewModel>>(await _context.Users
+                                                                      .Where(x => x.FirstName.ToLower().Contains(request.Text.ToLower())
+                                                                                  || x.LastName.ToLower().Contains(request.Text.ToLower())
+                                                                                  || x.Email.ToLower().Contains(request.Text.ToLower()))
+                                                                      .ToListAsync(cancellationToken));
             }
 
             return _mapper.Map<List<UserViewModel>>(await _context.Users.ToListAsync(cancellationToken));

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.SignalR;
+using OnlineChat.Application.Abstractions;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -6,35 +7,29 @@ using System.Threading.Tasks;
 namespace OnlineChat.Application.ChatActions
 {
     // [Authorize] // Uncomment this line if you want to require authorization
-    public class ChatHub : Hub
+    public class ChatHub(
+/*        IAppDbContext dbContext,
+        ICurrentUserService currentUserService*/
+        ) : Hub
     {
-        private readonly static Dictionary<string, User> _users = [];
-
-        public async Task SendMessage(string message)
+/*        private readonly IAppDbContext _context = dbContext;
+        private readonly ICurrentUserService _currentUserService = currentUserService;*/
+        private readonly static Dictionary<string, User> _users = new Dictionary<string, User>
         {
-            Console.WriteLine("Test message received");
-            await Clients.User("test").SendAsync(message);
-            await Clients.All.SendAsync("ReceiveMessage", message);
+                { "1", new User("Alice") },
+                { "2", new User("Bob") },
+                { "3", new User("Charlie") }
+        };
+
+        public async Task SendMessage(string toUserId, string fromUserId, string message)
+        {
+            Console.WriteLine($"Message: {message}\nFrom: {fromUserId}\nTo: {toUserId}");
+            await Clients.User(toUserId).SendAsync("ReceiveMessage", fromUserId, message);
         }
 
-        public async Task Register(User user)
+        public override Task OnConnectedAsync()
         {
-            var id = this.Context.ConnectionId;
-
-            if (_users.ContainsKey(id))
-                return;
-
-            _users.Add(id, user);
-            await Clients.Others.SendAsync("Connected", user);
-
-            var msg = "A new user has joined the chat";
-            await Clients.Others.SendAsync("ReceiveMessage", msg);
-            await Clients.Others.SendAsync("Connected", user);
-        }
-
-        public IEnumerable<User> GetOnlineUsers()
-        {
-            return _users.Values;
+            return base.OnConnectedAsync();
         }
 
         public override async Task OnDisconnectedAsync(Exception? exception)

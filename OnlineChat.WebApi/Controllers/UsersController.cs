@@ -40,11 +40,11 @@ namespace OnlineChat.WebApi.Controllers
         }
 
         [HttpGet("all-users")]
-        public async Task<IActionResult> GetAllUsers()
+        public async Task<IActionResult> GetAllUsers([FromQuery] string? searchText)
         {
             try
             {
-                return Ok(await _mediator.Send(new GetAllUsersQuery()));
+                return Ok(await _mediator.Send(new GetAllUsersQuery(searchText)));
             }
             catch (Exception ex)
             {
