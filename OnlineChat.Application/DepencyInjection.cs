@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.DependencyInjection;
 using OnlineChat.Application.Abstractions;
+using OnlineChat.Application.ChatActions;
 using OnlineChat.Application.Mappings;
 using OnlineChat.Application.Services;
 using System;
@@ -30,6 +32,7 @@ namespace OnlineChat.Application
 
             IMapper mapper = mappingconfig.CreateMapper();
             services.AddSingleton(mapper);
+            services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
             return services;
         }
     }

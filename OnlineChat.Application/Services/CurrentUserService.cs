@@ -20,8 +20,17 @@ namespace OnlineChat.Application.Services
             var idClaim = userClaims?.FirstOrDefault(x => x.Type == ClaimTypes.NameIdentifier);
             if (idClaim != null && Guid.TryParse(idClaim.Value, out Guid value))
             {
+                Console.WriteLine($"UserId has: {value}");
                 UserId = value;
             }
         }
+/*        public Guid UserId { get; private set; }
+
+        public CurrentUserService(IHttpContextAccessor httpContextAccessor)
+        {
+            var user = httpContextAccessor.HttpContext?.User;
+            var userIdClaim = user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            UserId = userIdClaim != null ? Guid.Parse(userIdClaim) : Guid.Empty;
+        }*/
     }
 }
