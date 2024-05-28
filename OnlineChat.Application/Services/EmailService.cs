@@ -71,6 +71,7 @@ namespace OnlineChat.Application.Services
             int confirmationCode = RandomNumberGenerator.GetInt32(10000, 99999);
             if (await SendEmail(email, "Confirmation Code for reset password", confirmationCode.ToString()))
             {
+                ConfirmationCodes.Remove(email);
                 ConfirmationCodes.Add(email, confirmationCode.ToString());
                 return true;
             }
@@ -82,6 +83,7 @@ namespace OnlineChat.Application.Services
             int confirmationCode = RandomNumberGenerator.GetInt32(10000, 99999);
             if (await SendEmail(email, "Confirma your email address", confirmationCode.ToString()))
             {
+                ConfirmationCodes.Remove(email);
                 ConfirmationCodes.Add(email, confirmationCode.ToString());
                 return true;
             }

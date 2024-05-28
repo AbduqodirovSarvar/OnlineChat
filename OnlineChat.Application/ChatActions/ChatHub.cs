@@ -26,17 +26,27 @@ namespace OnlineChat.Application.ChatActions
 
         public async Task SendMessage(string toUserId, string message)
         {
-            var fromUserId = _currentUserService.UserId;
-            Console.WriteLine($"{fromUserId} {message}");
+            var httpContext = Context.GetHttpContext();
+            if(httpContext == null )
+            {
+                throw new ArgumentNullException(nameof(httpContext));
+            }
 
-            if (fromUserId == Guid.Empty)
+            var userIdClaim = httpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
+
+            if (userIdClaim != null && Guid.TryParse(userIdClaim.Value, out Guid fromUserId))
+            {
+                Console.WriteLine($"{fromUserId} {message}");
+                Console.WriteLine($"Message: {message}\nTo: {toUserId}");
+                await Clients.User(toUserId).SendAsync("ReceiveMessage", fromUserId, message);
+                await _mediator.Send(new CreateNewMessageCommand(Guid.Parse(toUserId), fromUserId, message));
+            }
+            else
             {
                 throw new NotFoundException("Current User not found");
             }
-            Console.WriteLine($"Message: {message}\nTo: {toUserId}");
-            await Clients.User(toUserId).SendAsync("ReceiveMessage", fromUserId, message);
-            await _mediator.Send(new CreateNewMessageCommand(Guid.Parse(toUserId), message));
         }
+
 
         public override async Task OnConnectedAsync()
         {

@@ -12,16 +12,14 @@ using System.Threading.Tasks;
 namespace OnlineChat.Application.UseCases.ToDoList
 {
     public class CreateNewMessageCommandHandler(
-        IAppDbContext appDbContext,
-        ICurrentUserService currentUserService
+        IAppDbContext appDbContext
         ) : IRequestHandler<CreateNewMessageCommand, bool>
     {
         private readonly IAppDbContext _context = appDbContext;
-        private readonly ICurrentUserService _currentUserService = currentUserService;
         public async Task<bool> Handle(CreateNewMessageCommand request, CancellationToken cancellationToken)
         {
             var currentUser = await _context.Users
-                                            .FirstOrDefaultAsync(x => x.Id == _currentUserService.UserId, cancellationToken)
+                                            .FirstOrDefaultAsync(x => x.Id == request.FromUserId, cancellationToken)
                                             ?? throw new NotFoundException("Current User not found");
 
             var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == request.ToUserId, cancellationToken)

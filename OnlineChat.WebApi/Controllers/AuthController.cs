@@ -37,6 +37,19 @@ namespace OnlineChat.WebApi.Controllers
             }
         }
 
+        [HttpPost("reset-password")]
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordCommand command)
+        {
+            try
+            {
+                return Ok(await _mediator.Send(command));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
         [HttpPost("change-password")]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordCommand command)
         {
@@ -50,7 +63,7 @@ namespace OnlineChat.WebApi.Controllers
             }
         }
 
-        [HttpPost("send-code-for-reset-password")]
+        [HttpPost("send-confirmation-code-for-reset-password")]
         public async Task<IActionResult> SendCodeForReset([FromBody] SendConfirmationCodeForResetPasswordCommand command)
         {
             try
@@ -63,21 +76,8 @@ namespace OnlineChat.WebApi.Controllers
             }
         }
 
-        [HttpPost("send-code-for-confirm-email")]
+        [HttpPost("send-confirmation-code-for-check-email")]
         public async Task<IActionResult> SendCodeForConfirm([FromBody] SendConfirmationCodeCommand command)
-        {
-            try
-            {
-                return Ok(await _mediator.Send(command));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
-        [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordCommand command)
         {
             try
             {

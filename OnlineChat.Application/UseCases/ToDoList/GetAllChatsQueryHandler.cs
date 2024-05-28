@@ -47,7 +47,10 @@ namespace OnlineChat.Application.UseCases.ToDoList
                                                   .Select(x => x.ReceiverId)
                                                   .ToListAsync(cancellationToken);*/
 
-            var users = await _context.Users.Where(x => Ids.Contains(x.Id))
+            var users = await _context.Users
+                                            .Include(x => x.SentMessages)
+                                            .Include(x => x.ReceivedMessages)
+                                            .Where(x => Ids.Contains(x.Id))
                                             .Distinct()
                                             .ToListAsync(cancellationToken);
 

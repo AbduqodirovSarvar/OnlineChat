@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OnlineChat.Application.Abstractions;
@@ -8,6 +9,7 @@ namespace OnlineChat.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class StorageController(IFileService fileService) : ControllerBase
     {
         private readonly IFileService _fileService = fileService;

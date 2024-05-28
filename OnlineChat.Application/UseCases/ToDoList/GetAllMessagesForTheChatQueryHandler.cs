@@ -16,14 +16,16 @@ namespace OnlineChat.Application.UseCases.ToDoList
         IAppDbContext dbContext,
         IMapper mapper,
         ICurrentUserService currentUserService
-        ) : IRequestHandler<GetAllMessagesForTheChatQuery, ChatViewModel>
+        ) : IRequestHandler<GetAllMessagesForTheChatQuery, UserViewModel>
     {
         private readonly ICurrentUserService _currentUserService = currentUserService;
         private readonly IMapper _mapper = mapper;
         private readonly IAppDbContext _context = dbContext;
-        public async Task<ChatViewModel> Handle(GetAllMessagesForTheChatQuery request, CancellationToken cancellationToken)
+        public async Task<UserViewModel> Handle(GetAllMessagesForTheChatQuery request, CancellationToken cancellationToken)
         {
             var currentUser = await _context.Users
+                                            .Include(x => x.SentMessages)
+                                            .Include(x => x.ReceivedMessages)
                                             .FirstOrDefaultAsync(x => x.Id == _currentUserService.UserId, cancellationToken)
                                             ?? throw new NotFoundException();
 
@@ -36,11 +38,12 @@ namespace OnlineChat.Application.UseCases.ToDoList
                                          || (x.SenderId == user.Id && x.ReceiverId == currentUser.Id))
                                          .ToListAsync(cancellationToken);
 
-            return new ChatViewModel()
+            /*return new ChatViewModel()
             {
                 User = _mapper.Map<UserViewModel>(user),
                 Messages = _mapper.Map<List<MessageViewModel>>(messages)
-            };
+            };*/
+            return _mapper.Map<UserViewModel>(user);
         }
     }
 }

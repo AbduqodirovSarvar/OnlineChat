@@ -9,7 +9,7 @@ namespace OnlineChat.WebApi.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class UsersController(IMediator mediator) : ControllerBase
+    public class UserController(IMediator mediator) : ControllerBase
     {
         private readonly IMediator _mediator = mediator;
 
@@ -39,7 +39,7 @@ namespace OnlineChat.WebApi.Controllers
             }
         }
 
-        [HttpGet("all-users")]
+        [HttpGet("all")]
         public async Task<IActionResult> GetAllUsers([FromQuery] string? searchText)
         {
             try
@@ -51,20 +51,6 @@ namespace OnlineChat.WebApi.Controllers
                 return BadRequest(ex.Message);
             }
         }
-
-        [HttpPut("update")]
-        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand command)
-        {
-            try
-            {
-                return Ok(await _mediator.Send(command));
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
 
         [HttpGet("my-chats")]
         public async Task<IActionResult> GetAllChats()
@@ -81,6 +67,19 @@ namespace OnlineChat.WebApi.Controllers
 
         [HttpGet("chat-messages")]
         public async Task<IActionResult> GetMessages([FromQuery] GetAllMessagesForTheChatQuery command)
+        {
+            try
+            {
+                return Ok(await _mediator.Send(command));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
+
+        [HttpPut("update")]
+        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand command)
         {
             try
             {

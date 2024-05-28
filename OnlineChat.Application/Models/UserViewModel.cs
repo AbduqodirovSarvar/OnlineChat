@@ -18,7 +18,7 @@ namespace OnlineChat.Application.Models
         public string Email { get; set; } = null!;
         public EnumViewModel Role { get; set; } = null!;
         public DateTime CreatedAt { get; set; }
-        public bool IsDeleted { get; set; }
+        public int UnReadedMessageCount { get; set; }
         public ICollection<MessageViewModel> Messages { get; set; } = new List<MessageViewModel>();
     }
 }

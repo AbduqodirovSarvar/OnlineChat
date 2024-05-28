@@ -38,14 +38,20 @@ namespace OnlineChat.Application.UseCases.ToDoList
 
             if(request.Id != null)
             {
-                return _mapper.Map<UserViewModel>(await _context.Users.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken) 
-                                                                      ?? throw new NotFoundException());
+                return _mapper.Map<UserViewModel>(await _context.Users
+                                                                .Include(x => x.SentMessages)
+                                                                .Include(x => x.ReceivedMessages)
+                                                                .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken) 
+                                                                ?? throw new NotFoundException());
             }
 
             if(request.Email != null)
             {
-                return _mapper.Map<UserViewModel>(await _context.Users.FirstOrDefaultAsync(x => x.Email == request.Email, cancellationToken)
-                                                                      ?? throw new NotFoundException());
+                return _mapper.Map<UserViewModel>(await _context.Users
+                                                                .Include(x => x.SentMessages)
+                                                                .Include(x => x.ReceivedMessages)
+                                                                .FirstOrDefaultAsync(x => x.Email == request.Email, cancellationToken)
+                                                                ?? throw new NotFoundException());
             }
             return null;
         }

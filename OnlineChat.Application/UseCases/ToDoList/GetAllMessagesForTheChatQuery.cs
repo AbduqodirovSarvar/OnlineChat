@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OnlineChat.Application.UseCases.ToDoList
 {
-    public class GetAllMessagesForTheChatQuery : IRequest<ChatViewModel>
+    public class GetAllMessagesForTheChatQuery : IRequest<UserViewModel>
     {
         public Guid UserId { get; set; }
     }

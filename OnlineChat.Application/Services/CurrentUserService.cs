@@ -24,13 +24,5 @@ namespace OnlineChat.Application.Services
                 UserId = value;
             }
         }
-/*        public Guid UserId { get; private set; }
-
-        public CurrentUserService(IHttpContextAccessor httpContextAccessor)
-        {
-            var user = httpContextAccessor.HttpContext?.User;
-            var userIdClaim = user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-            UserId = userIdClaim != null ? Guid.Parse(userIdClaim) : Guid.Empty;
-        }*/
     }
 }
