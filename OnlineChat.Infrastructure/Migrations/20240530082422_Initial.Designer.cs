@@ -12,7 +12,7 @@ using OnlineChat.Infrastructure.DbContexts;
 namespace OnlineChat.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20240523140333_Initial")]
+    [Migration("20240530082422_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -106,14 +106,36 @@ namespace OnlineChat.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("a888bbd0-7059-4a5b-b057-1069246ef7f8"),
-                            CreatedAt = new DateTime(2024, 5, 23, 14, 3, 32, 731, DateTimeKind.Utc).AddTicks(28),
+                            Id = new Guid("05d862aa-0fb2-493e-9a75-63823a5f7426"),
+                            CreatedAt = new DateTime(2024, 5, 30, 8, 24, 21, 886, DateTimeKind.Utc).AddTicks(6525),
                             Email = "abduqodirovsarvar.2002@gmail.com",
                             FirstName = "SuperAdmin",
                             IsDeleted = false,
                             LastName = "SuperAdmin",
-                            PasswordHash = "mgub682wLvVoFShP2yuP72G7qYggK/T52lmH7WZKRK2kC7pKVdSQUZIEZXeSlho8S92YgMSFQlRyia0UTYJ/Kg==",
+                            PasswordHash = "JB+FNBSsH2Il6OsezHksIwj+E0d5332YJ47UV+nlGeCyl6JVj0mC29bs+IK1SP5y+K9uztUNK/BoqxTTVBxpZg==",
                             Role = 3
+                        },
+                        new
+                        {
+                            Id = new Guid("6e39c6f8-e2a3-49ab-88b4-a51f9af457c0"),
+                            CreatedAt = new DateTime(2024, 5, 30, 8, 24, 21, 890, DateTimeKind.Utc).AddTicks(8460),
+                            Email = "user1@gmail.com",
+                            FirstName = "User1 firstname",
+                            IsDeleted = false,
+                            LastName = "User1 lastname",
+                            PasswordHash = "90sdOz/PPC1VoeD/CNNZmEYaPrBnUgIKcB53LUhwZvZeSwfonRjJz9tcD0zaCda57LtkfGFhhjbqHpzJ5C7+lA==",
+                            Role = 1
+                        },
+                        new
+                        {
+                            Id = new Guid("92b939ac-dcab-416e-bb78-7080cba8afa2"),
+                            CreatedAt = new DateTime(2024, 5, 30, 8, 24, 21, 894, DateTimeKind.Utc).AddTicks(7942),
+                            Email = "user2@gmail.com",
+                            FirstName = "User2 firstname",
+                            IsDeleted = false,
+                            LastName = "user2 lastname",
+                            PasswordHash = "4no4wEFWsh8VJfZwHGysXLcnEluJQoLJbOeRGTvfbiBdIbJyrCmGIY+/wuWldfDPFRPxfEyFi0h0h8W4s3ooiA==",
+                            Role = 1
                         });
                 });
 

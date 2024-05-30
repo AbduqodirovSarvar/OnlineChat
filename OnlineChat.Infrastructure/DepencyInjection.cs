@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
@@ -24,7 +25,8 @@ namespace OnlineChat.Infrastructure
             services.AddScoped<ITokenService, TokenService>();
             services.AddDbContext<AppDbContext>(options =>
             {
-                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"));
+                options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"),
+                    o => o.UseQuerySplittingBehavior(QuerySplittingBehavior.SplitQuery));
             });
             services.Configure<JWTConfiguration>(configuration.GetSection("JWTConfiguration"));
 
@@ -42,7 +44,6 @@ namespace OnlineChat.Infrastructure
                         ValidAudience = configuration["JWTConfiguration:ValidAudience"],
                         ValidIssuer = configuration["JWTConfiguration:ValidIssuer"],
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretWord))
-
                     };
                 });
             services.AddAuthorization();

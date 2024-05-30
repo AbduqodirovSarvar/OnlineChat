@@ -14,5 +14,6 @@ namespace OnlineChat.Application.Models
         public string Msg { get; set; } = null!;
         public bool IsSeen { get; set; }
         public DateTime SeenAt { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

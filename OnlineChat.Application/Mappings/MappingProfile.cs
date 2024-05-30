@@ -16,7 +16,7 @@ namespace OnlineChat.Application.Mappings
         {
             CreateMap<User, UserViewModel>()
                 .ForMember(x => x.Role, y => y.MapFrom(z => z.Role))
-                .ForMember(x => x.UnReadedMessageCount, y => y.MapFrom(z => z.ReceivedMessages.Where(x => !x.IsSeen).Count()))
+                .ForMember(x => x.UnReadedMessageCount, y => y.MapFrom(z => z.SentMessages.Where(x => !x.IsSeen).Count()))
                 .ForMember(x => x.Messages, y => y.MapFrom(z => z.SentMessages.Concat(z.ReceivedMessages).OrderByDescending(x=> x.CreatedAt)))
                 .ReverseMap();
 

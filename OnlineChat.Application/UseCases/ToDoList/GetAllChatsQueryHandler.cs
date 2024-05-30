@@ -5,10 +5,9 @@ using OnlineChat.Application.Abstractions;
 using OnlineChat.Application.Models;
 using OnlineChat.Domain.Entities;
 using OnlineChat.Domain.Exceptions;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace OnlineChat.Application.UseCases.ToDoList
@@ -16,8 +15,7 @@ namespace OnlineChat.Application.UseCases.ToDoList
     public class GetAllChatsQueryHandler(
         IAppDbContext dbContext,
         ICurrentUserService currentUserService,
-        IMapper mapper
-        ) : IRequestHandler<GetAllChatsQuery, List<UserViewModel>>
+        IMapper mapper) : IRequestHandler<GetAllChatsQuery, List<UserViewModel>>
     {
         private readonly IAppDbContext _context = dbContext;
         private readonly ICurrentUserService _currentUserService = currentUserService;
@@ -32,27 +30,26 @@ namespace OnlineChat.Application.UseCases.ToDoList
                                             ?? throw new NotFoundException("Current User not found");
 
             var Ids = currentUser.ReceivedMessages.Select(x => x.SenderId)
-                                                  .ToList()
-                                                  .Concat(currentUser.SentMessages
-                                                                     .Select(x => x.ReceiverId).ToList())
+                                                  .Concat(currentUser.SentMessages.Select(x => x.ReceiverId))
+                                                  .Distinct()
                                                   .ToList();
-/*
-            var receiveFromIds = await _context.Messages
-                                                  .Where(x => x.ReceiverId == currentUser.Id)
-                                                  .Select(x => x.SenderId)
-                                                  .ToListAsync(cancellationToken);
-
-            var sendToIds = await _context.Messages
-                                                  .Where(x => x.SenderId == currentUser.Id)
-                                                  .Select(x => x.ReceiverId)
-                                                  .ToListAsync(cancellationToken);*/
 
             var users = await _context.Users
-                                            .Include(x => x.SentMessages)
-                                            .Include(x => x.ReceivedMessages)
-                                            .Where(x => Ids.Contains(x.Id))
-                                            .Distinct()
-                                            .ToListAsync(cancellationToken);
+                                      .Include(x => x.SentMessages)
+                                      .Include(x => x.ReceivedMessages)
+                                      .Where(x => Ids.Contains(x.Id))
+                                      .Select(user => new
+                                      {
+                                          User = user,
+                                          LastMessageDate = user.SentMessages
+                                              .Select(msg => msg.CreatedAt)
+                                              .Concat(user.ReceivedMessages.Select(msg => msg.CreatedAt))
+                                              .OrderByDescending(date => date)
+                                              .FirstOrDefault()
+                                      })
+                                      .OrderByDescending(x => x.LastMessageDate)
+                                      .Select(x => x.User)
+                                      .ToListAsync(cancellationToken);
 
             return _mapper.Map<List<UserViewModel>>(users);
         }

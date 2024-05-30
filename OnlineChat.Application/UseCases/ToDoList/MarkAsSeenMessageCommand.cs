@@ -9,6 +9,7 @@ namespace OnlineChat.Application.UseCases.ToDoList
 {
     public class MarkAsSeenMessageCommand : IRequest<bool>
     {
+        public MarkAsSeenMessageCommand() { }
         public MarkAsSeenMessageCommand(string id) 
         {
             if(Guid.TryParse(id, out Guid userId))

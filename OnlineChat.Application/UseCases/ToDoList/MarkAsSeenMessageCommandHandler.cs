@@ -28,7 +28,7 @@ namespace OnlineChat.Application.UseCases.ToDoList
                                             ?? throw new NotFoundException("User not found");
 
             var messages = await _context.Messages.Where(x => x.SenderId == user.Id 
-                                                           && x.ReceiverId == currentUser.Id 
+                                                           && x.ReceiverId == currentUser.Id
                                                            && !x.IsSeen)
                                                   .ToListAsync(cancellationToken);
 

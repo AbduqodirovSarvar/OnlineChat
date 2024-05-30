@@ -27,8 +27,8 @@ namespace OnlineChat.Application.UseCases.ToDoList
 
             var message = new Message()
             {
-                ReceiverId = user.Id,
                 SenderId = currentUser.Id,
+                ReceiverId = user.Id,
                 Msg = request.Msg
             };
 

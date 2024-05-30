@@ -28,14 +28,6 @@ namespace OnlineChat.Application.UseCases.ToDoList
             var currentUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == _currentUserService.UserId, cancellationToken)
                                                   ?? throw new NotFoundException("Current user not found");
 
-/*            if(!(currentUser.Id == request.Id
-                || currentUser.Email == request.Email 
-                || currentUser.Role == Domain.Enums.UserRole.Admin 
-                || currentUser.Role == Domain.Enums.UserRole.SuperAdmin))
-            {
-                throw new AccessDeniedException();
-            }*/
-
             if(request.Id != null)
             {
                 return _mapper.Map<UserViewModel>(await _context.Users

@@ -17,27 +17,23 @@ namespace OnlineChat.Application.ChatActions
 {
     [Authorize]
     public class ChatHub(
-        IMediator mediator,
-        ICurrentUserService currentUserService
+        IMediator mediator
         ) : Hub
     {
         private readonly IMediator _mediator = mediator;
-        private readonly ICurrentUserService _currentUserService = currentUserService;
 
         public async Task SendMessage(string toUserId, string message)
         {
             var httpContext = Context.GetHttpContext();
             if(httpContext == null )
             {
-                throw new ArgumentNullException(nameof(httpContext));
+                throw new ArgumentException(nameof(httpContext));
             }
 
             var userIdClaim = httpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
 
             if (userIdClaim != null && Guid.TryParse(userIdClaim.Value, out Guid fromUserId))
             {
-                Console.WriteLine($"{fromUserId} {message}");
-                Console.WriteLine($"Message: {message}\nTo: {toUserId}");
                 await Clients.User(toUserId).SendAsync("ReceiveMessage", fromUserId, message);
                 await _mediator.Send(new CreateNewMessageCommand(Guid.Parse(toUserId), fromUserId, message));
             }

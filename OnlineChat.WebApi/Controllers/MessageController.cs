@@ -15,12 +15,12 @@ namespace OnlineChat.WebApi.Controllers
     {
         private readonly IMediator _mediator = mediator;
 
-        [HttpPut("mark-as-read")]
-        public async Task<IActionResult> MarkAsRead([FromBody] string id)
+        [HttpGet("mark-as-read")]
+        public async Task<IActionResult> MarkAsRead([FromQuery] MarkAsSeenMessageCommand command)
         {
             try
             {
-                return Ok(await _mediator.Send(new MarkAsSeenMessageCommand(id)));
+                return Ok(await _mediator.Send(command));
             }
             catch (Exception ex)
             {

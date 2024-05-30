@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.DependencyInjection;
 using OnlineChat.Application.Abstractions;
 using OnlineChat.Domain.Entities;
@@ -11,7 +12,10 @@ using System.Threading.Tasks;
 
 namespace OnlineChat.Infrastructure.DbContexts
 {
-    public class AppDbContext(DbContextOptions<AppDbContext> options, IServiceProvider serviceProvider) : DbContext(options), IAppDbContext
+    public class AppDbContext(
+        DbContextOptions<AppDbContext> options, 
+        IServiceProvider serviceProvider
+        ) : DbContext(options), IAppDbContext
     {
         private readonly IServiceProvider _serviceProvider = serviceProvider;
 
@@ -32,6 +36,11 @@ namespace OnlineChat.Infrastructure.DbContexts
                 Console.WriteLine("HashService is not registered in the service provider!");
             }
             modelBuilder.ApplyConfiguration(new MessageTypeConfiguration());
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
         }
     }
 }
