@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineChat.Infrastructure",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineChat.WebApi", "OnlineChat.WebApi\OnlineChat.WebApi.csproj", "{4334022A-299B-474B-9C54-BE88F0C71F70}"
 EndProject
+Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{D6E9EB1C-6FE6-4277-8C0C-BE624C831DEA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -49,6 +51,10 @@ Global
 		{4334022A-299B-474B-9C54-BE88F0C71F70}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4334022A-299B-474B-9C54-BE88F0C71F70}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4334022A-299B-474B-9C54-BE88F0C71F70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6E9EB1C-6FE6-4277-8C0C-BE624C831DEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D6E9EB1C-6FE6-4277-8C0C-BE624C831DEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D6E9EB1C-6FE6-4277-8C0C-BE624C831DEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D6E9EB1C-6FE6-4277-8C0C-BE624C831DEA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

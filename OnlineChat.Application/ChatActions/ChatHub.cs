@@ -1,31 +1,31 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.SignalR;
-using Microsoft.EntityFrameworkCore;
 using OnlineChat.Application.Abstractions;
-using OnlineChat.Application.Services;
 using OnlineChat.Application.UseCases.ToDoList;
-using OnlineChat.Domain.Entities;
 using OnlineChat.Domain.Exceptions;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace OnlineChat.Application.ChatActions
 {
     [Authorize]
-    public class ChatHub(
-        IMediator mediator
-        ) : Hub
+    public class ChatHub : Hub
     {
-        private readonly IMediator _mediator = mediator;
+        private readonly IMediator _mediator;
+
+        public ChatHub(IMediator mediator)
+        {
+            _mediator = mediator;
+        }
 
         public async Task SendMessage(string toUserId, string message)
         {
             var httpContext = Context.GetHttpContext();
-            if(httpContext == null )
+            if (httpContext == null)
             {
                 throw new ArgumentException(nameof(httpContext));
             }
@@ -42,7 +42,6 @@ namespace OnlineChat.Application.ChatActions
                 throw new NotFoundException("Current User not found");
             }
         }
-
 
         public override async Task OnConnectedAsync()
         {

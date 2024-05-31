@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using OnlineChat.Application;
@@ -8,14 +9,14 @@ using OnlineChat.Infrastructure.DbContexts;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
+// Register application and infrastructure services
 builder.Services.DepencyInjectionApplication();
 builder.Services.DepencyInjectionInfrastructure(builder.Configuration);
-builder.Services.AddSwaggerGen();
-builder.Services.AddSignalR();
+
 builder.Services.AddSignalR();
 builder.Services.AddCors(options =>
 {
@@ -30,14 +31,14 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddSwaggerGen(options =>
 {
-    options.SwaggerDoc("v1", new OpenApiInfo()
+    options.SwaggerDoc("v1", new OpenApiInfo
     {
         Version = "v1",
-        Title = "My Portfolio",
-        Description = "My portfolio website's backend"
+        Title = "My Online Chat",
+        Description = "My  Online Chat's backend apis"
     });
 
-    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         Scheme = "Bearer",
         BearerFormat = "JWT",
@@ -46,22 +47,20 @@ builder.Services.AddSwaggerGen(options =>
         Type = SecuritySchemeType.Http
     });
 
-    options.AddSecurityRequirement(new OpenApiSecurityRequirement()
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
         {
-            new OpenApiSecurityScheme()
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
                 {
-                    Reference = new OpenApiReference()
-                    {
-                        Id = "Bearer",
-                        Type = ReferenceType.SecurityScheme
-                    }
-                },
+                    Id = "Bearer",
+                    Type = ReferenceType.SecurityScheme
+                }
+            },
             new List<string>()
         }
-
     });
-
 });
 
 var app = builder.Build();
@@ -86,20 +85,12 @@ var context = services.GetRequiredService<AppDbContext>();
 try
 {
     context.Database.Migrate();
-    Console.WriteLine("Migrations applying successfully completed");
+    Console.WriteLine("Migrations applied successfully");
 }
 catch (Exception ex)
 {
     Console.WriteLine($"Error applying migrations: {ex.Message}");
 }
-app.UseDeveloperExceptionPage();
-
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapHub<ChatHub>("/chat");
-});
-
 app.MapControllers();
-/*app.MapHub<ChatHub>("/chat");*/
-
+app.MapHub<ChatHub>("/chat");
 app.Run();
