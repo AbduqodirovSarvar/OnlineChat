@@ -9,7 +9,6 @@ namespace OnlineChat.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
     public class StorageController(IFileService fileService) : ControllerBase
     {
         private readonly IFileService _fileService = fileService;

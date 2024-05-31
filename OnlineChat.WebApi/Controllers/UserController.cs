@@ -79,7 +79,7 @@ namespace OnlineChat.WebApi.Controllers
         }
 
         [HttpPut("update")]
-        public async Task<IActionResult> UpdateUser([FromBody] UpdateUserCommand command)
+        public async Task<IActionResult> UpdateUser([FromForm] UpdateUserCommand command)
         {
             try
             {
