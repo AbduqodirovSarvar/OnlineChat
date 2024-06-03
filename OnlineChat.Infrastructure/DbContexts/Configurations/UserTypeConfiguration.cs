@@ -21,13 +21,13 @@ namespace OnlineChat.Infrastructure.DbContexts.Configurations
             builder.HasData(
                 new User()
                 {
-                FirstName = "SuperAdmin",
-                LastName = "SuperAdmin",
+                FirstName = "Super Admin",
+                LastName = "Chat Project's super admin",
                 PasswordHash = hashService.GetHash("Sarvar.12345"),
                 Email = "abduqodirovsarvar.2002@gmail.com",
                 Role = Domain.Enums.UserRole.SuperAdmin
-                },
-                new User()
+                }
+               /* new User()
                 {
                     FirstName = "User1 firstname",
                     LastName = "User1 lastname",
@@ -42,7 +42,7 @@ namespace OnlineChat.Infrastructure.DbContexts.Configurations
                     PasswordHash = hashService.GetHash("Sarvar.12345"),
                     Email = "user2@gmail.com",
                     Role = Domain.Enums.UserRole.User
-                }
+                }*/
                 );
         }
     }

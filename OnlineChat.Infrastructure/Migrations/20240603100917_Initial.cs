@@ -3,8 +3,6 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-#pragma warning disable CA1814 // Prefer jagged arrays over multidimensional
-
 namespace OnlineChat.Infrastructure.Migrations
 {
     /// <inheritdoc />
@@ -65,12 +63,7 @@ namespace OnlineChat.Infrastructure.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "CreatedAt", "Email", "FirstName", "IsDeleted", "LastName", "PasswordHash", "PhotoName", "Role" },
-                values: new object[,]
-                {
-                    { new Guid("05d862aa-0fb2-493e-9a75-63823a5f7426"), new DateTime(2024, 5, 30, 8, 24, 21, 886, DateTimeKind.Utc).AddTicks(6525), "abduqodirovsarvar.2002@gmail.com", "SuperAdmin", false, "SuperAdmin", "JB+FNBSsH2Il6OsezHksIwj+E0d5332YJ47UV+nlGeCyl6JVj0mC29bs+IK1SP5y+K9uztUNK/BoqxTTVBxpZg==", null, 3 },
-                    { new Guid("6e39c6f8-e2a3-49ab-88b4-a51f9af457c0"), new DateTime(2024, 5, 30, 8, 24, 21, 890, DateTimeKind.Utc).AddTicks(8460), "user1@gmail.com", "User1 firstname", false, "User1 lastname", "90sdOz/PPC1VoeD/CNNZmEYaPrBnUgIKcB53LUhwZvZeSwfonRjJz9tcD0zaCda57LtkfGFhhjbqHpzJ5C7+lA==", null, 1 },
-                    { new Guid("92b939ac-dcab-416e-bb78-7080cba8afa2"), new DateTime(2024, 5, 30, 8, 24, 21, 894, DateTimeKind.Utc).AddTicks(7942), "user2@gmail.com", "User2 firstname", false, "user2 lastname", "4no4wEFWsh8VJfZwHGysXLcnEluJQoLJbOeRGTvfbiBdIbJyrCmGIY+/wuWldfDPFRPxfEyFi0h0h8W4s3ooiA==", null, 1 }
-                });
+                values: new object[] { new Guid("29588386-2d8c-444b-85f7-c9cfa4cfd413"), new DateTime(2024, 6, 3, 10, 9, 16, 925, DateTimeKind.Utc).AddTicks(7772), "abduqodirovsarvar.2002@gmail.com", "Super Admin", false, "Chat Project's super admin", "rcBCc3ltCI2NxrCDD5XXa530uY+47P+FP0jqqPXB34MFA9AflZM0k3ZvrTzvXxuMb/Cf6CFTMZWqNYGDPO+QjA==", null, 3 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Messages_ReceiverId",

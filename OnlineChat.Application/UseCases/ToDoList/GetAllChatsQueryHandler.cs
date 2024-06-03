@@ -29,15 +29,26 @@ namespace OnlineChat.Application.UseCases.ToDoList
                                             .FirstOrDefaultAsync(x => x.Id == _currentUserService.UserId, cancellationToken)
                                             ?? throw new NotFoundException("Current User not found");
 
-            var Ids = currentUser.ReceivedMessages.Select(x => x.SenderId)
+
+            var sent = await _context.Messages
+                            .Where(x => x.SenderId == currentUser.Id)
+                            .Select(x => x.ReceiverId)
+                            .ToListAsync(cancellationToken);
+
+            var received = await _context.Messages
+                            .Where(x => x.ReceiverId == currentUser.Id)
+                            .Select(x => x.SenderId)
+                            .ToListAsync(cancellationToken);
+            /*var Ids = currentUser.ReceivedMessages.Select(x => x.SenderId)
                                                   .Concat(currentUser.SentMessages.Select(x => x.ReceiverId))
                                                   .Distinct()
-                                                  .ToList();
+                                                  .ToList();*/
 
+            var Ids = sent.Concat(received).Distinct();
             var users = await _context.Users
                                       .Include(x => x.SentMessages)
                                       .Include(x => x.ReceivedMessages)
-                                      .Where(x => Ids.Contains(x.Id))
+                                      .Where(x => Ids.Contains(x.Id) && !x.IsDeleted)
                                       .Select(user => new
                                       {
                                           User = user,

@@ -103,36 +103,14 @@ namespace OnlineChat.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("05d862aa-0fb2-493e-9a75-63823a5f7426"),
-                            CreatedAt = new DateTime(2024, 5, 30, 8, 24, 21, 886, DateTimeKind.Utc).AddTicks(6525),
+                            Id = new Guid("29588386-2d8c-444b-85f7-c9cfa4cfd413"),
+                            CreatedAt = new DateTime(2024, 6, 3, 10, 9, 16, 925, DateTimeKind.Utc).AddTicks(7772),
                             Email = "abduqodirovsarvar.2002@gmail.com",
-                            FirstName = "SuperAdmin",
+                            FirstName = "Super Admin",
                             IsDeleted = false,
-                            LastName = "SuperAdmin",
-                            PasswordHash = "JB+FNBSsH2Il6OsezHksIwj+E0d5332YJ47UV+nlGeCyl6JVj0mC29bs+IK1SP5y+K9uztUNK/BoqxTTVBxpZg==",
+                            LastName = "Chat Project's super admin",
+                            PasswordHash = "rcBCc3ltCI2NxrCDD5XXa530uY+47P+FP0jqqPXB34MFA9AflZM0k3ZvrTzvXxuMb/Cf6CFTMZWqNYGDPO+QjA==",
                             Role = 3
-                        },
-                        new
-                        {
-                            Id = new Guid("6e39c6f8-e2a3-49ab-88b4-a51f9af457c0"),
-                            CreatedAt = new DateTime(2024, 5, 30, 8, 24, 21, 890, DateTimeKind.Utc).AddTicks(8460),
-                            Email = "user1@gmail.com",
-                            FirstName = "User1 firstname",
-                            IsDeleted = false,
-                            LastName = "User1 lastname",
-                            PasswordHash = "90sdOz/PPC1VoeD/CNNZmEYaPrBnUgIKcB53LUhwZvZeSwfonRjJz9tcD0zaCda57LtkfGFhhjbqHpzJ5C7+lA==",
-                            Role = 1
-                        },
-                        new
-                        {
-                            Id = new Guid("92b939ac-dcab-416e-bb78-7080cba8afa2"),
-                            CreatedAt = new DateTime(2024, 5, 30, 8, 24, 21, 894, DateTimeKind.Utc).AddTicks(7942),
-                            Email = "user2@gmail.com",
-                            FirstName = "User2 firstname",
-                            IsDeleted = false,
-                            LastName = "user2 lastname",
-                            PasswordHash = "4no4wEFWsh8VJfZwHGysXLcnEluJQoLJbOeRGTvfbiBdIbJyrCmGIY+/wuWldfDPFRPxfEyFi0h0h8W4s3ooiA==",
-                            Role = 1
                         });
                 });
 
