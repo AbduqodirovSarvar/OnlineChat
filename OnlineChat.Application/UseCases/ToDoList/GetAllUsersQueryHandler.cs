@@ -13,31 +13,23 @@ using System.Threading.Tasks;
 
 namespace OnlineChat.Application.UseCases.ToDoList
 {
-    public class GetAllUsersQueryHandler : IRequestHandler<GetAllUsersQuery, List<UserViewModel>>
+    public class GetAllUsersQueryHandler(
+        IAppDbContext dbContext,
+        IMapper mapper,
+        ICurrentUserService currentUserService) : IRequestHandler<GetAllUsersQuery, List<UserViewModel>>
     {
-        private readonly IAppDbContext _context;
-        private readonly IMapper _mapper;
-        private readonly ICurrentUserService _currentUserService;
-
-        public GetAllUsersQueryHandler(
-            IAppDbContext dbContext,
-            IMapper mapper,
-            ICurrentUserService currentUserService)
-        {
-            _context = dbContext;
-            _mapper = mapper;
-            _currentUserService = currentUserService;
-        }
+        private readonly IAppDbContext _context = dbContext;
+        private readonly IMapper _mapper = mapper;
+        private readonly ICurrentUserService _currentUserService = currentUserService;
 
         public async Task<List<UserViewModel>> Handle(GetAllUsersQuery request, CancellationToken cancellationToken)
         {
             var currentUser = await _context.Users
-                                            .Where(x => !x.IsDeleted)
                                             .FirstOrDefaultAsync(x => x.Id == _currentUserService.UserId, cancellationToken)
                                             ?? throw new NotFoundException("Current User not found");
 
             IQueryable<User> query = _context.Users
-                                             .Where(x => !x.IsDeleted && x.Id != currentUser.Id);
+                                             .Where(x => x.Id != currentUser.Id);
 
             if (!string.IsNullOrEmpty(request.Text))
             {

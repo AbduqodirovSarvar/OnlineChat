@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using OnlineChat.Application.Abstractions;
 using OnlineChat.Application.Models;
 using OnlineChat.Domain.Entities;
 using OnlineChat.Domain.Enums;
@@ -12,7 +13,7 @@ namespace OnlineChat.Application.Mappings
 {
     public class MappingProfile : Profile
     {
-        public MappingProfile() 
+        public MappingProfile(IEncryptionService encryptionService)
         {
             CreateMap<User, UserViewModel>()
                 .ForMember(x => x.Role, y => y.MapFrom(z => z.Role))
@@ -25,7 +26,9 @@ namespace OnlineChat.Application.Mappings
                 .ForMember(x => x.Name, y => y.MapFrom(z => z.ToString()))
                 .ReverseMap();
 
-            CreateMap<Message, MessageViewModel>().ReverseMap();
+            CreateMap<Message, MessageViewModel>()
+                .ForMember(x => x.Msg, y => y.MapFrom(z => encryptionService.Decrypt(z.EncryptedContent, z.IV)))
+                .ReverseMap();
         }
     }
 }

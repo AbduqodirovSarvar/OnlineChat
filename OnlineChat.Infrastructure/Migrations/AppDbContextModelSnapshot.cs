@@ -31,15 +31,19 @@ namespace OnlineChat.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("EncryptedContent")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<byte[]>("IV")
+                        .IsRequired()
+                        .HasColumnType("bytea");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
                     b.Property<bool>("IsSeen")
                         .HasColumnType("boolean");
-
-                    b.Property<string>("Msg")
-                        .IsRequired()
-                        .HasColumnType("text");
 
                     b.Property<Guid>("ReceiverId")
                         .HasColumnType("uuid");
@@ -103,13 +107,13 @@ namespace OnlineChat.Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("29588386-2d8c-444b-85f7-c9cfa4cfd413"),
-                            CreatedAt = new DateTime(2024, 6, 3, 10, 9, 16, 925, DateTimeKind.Utc).AddTicks(7772),
+                            Id = new Guid("94f859d1-8bdd-4b55-903a-b8a66834769d"),
+                            CreatedAt = new DateTime(2024, 6, 4, 6, 31, 57, 867, DateTimeKind.Utc).AddTicks(2397),
                             Email = "abduqodirovsarvar.2002@gmail.com",
                             FirstName = "Super Admin",
                             IsDeleted = false,
                             LastName = "Chat Project's super admin",
-                            PasswordHash = "rcBCc3ltCI2NxrCDD5XXa530uY+47P+FP0jqqPXB34MFA9AflZM0k3ZvrTzvXxuMb/Cf6CFTMZWqNYGDPO+QjA==",
+                            PasswordHash = "09AsRiFzcUPti8E+269OZCONc6Hla/qt1YjZVAqjqNtvDiD0XNjsj9SjufTU5XOBQ+wrqgNRF08mtc/LcMTDxA==",
                             Role = 3
                         });
                 });

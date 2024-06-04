@@ -1,38 +1,40 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OnlineChat.Application.Abstractions;
 using OnlineChat.Application.ChatActions;
 using OnlineChat.Application.Mappings;
 using OnlineChat.Application.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OnlineChat.Application
 {
-    public static class DepencyInjection
+    public static class DependencyInjection
     {
-        public static IServiceCollection DepencyInjectionApplication(this IServiceCollection services)
+        public static IServiceCollection DepencyInjectionApplication(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddHttpContextAccessor();
             services.AddScoped<ICurrentUserService, CurrentUserService>();
+            services.AddSingleton<IEncryptionService>(provider => new EncryptionService(configuration));
+
             services.AddMediatR(cfg =>
             {
-                cfg.RegisterServicesFromAssembly(typeof(DepencyInjection).Assembly);
-            });
-            services.AddScoped<IFileService, FileService>();
-            services.AddSingleton<IEmailService, EmailService>();
-            var mappingconfig = new MapperConfiguration(x =>
-            {
-                x.AddProfile(new MappingProfile());
+                cfg.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly);
             });
 
-            IMapper mapper = mappingconfig.CreateMapper();
-            services.AddSingleton(mapper);
+            services.AddScoped<IFileService, FileService>();
+            services.AddSingleton<IEmailService, EmailService>();
+
+            services.AddAutoMapper(cfg =>
+            {
+                var serviceProvider = services.BuildServiceProvider();
+                var encryptionService = serviceProvider.GetRequiredService<IEncryptionService>();
+                cfg.AddProfile(new MappingProfile(encryptionService));
+            });
+
             services.AddSingleton<IUserIdProvider, CustomUserIdProvider>();
+
             return services;
         }
     }

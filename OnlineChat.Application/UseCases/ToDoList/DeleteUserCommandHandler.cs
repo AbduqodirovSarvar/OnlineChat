@@ -32,8 +32,11 @@ namespace OnlineChat.Application.UseCases.ToDoList
                 throw new Exception("Access denied");
             }
 
-            var user = await _context.Users.FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken)
-                                           ?? throw new NotFoundException();
+            var user = await _context.Users
+                                        .Include(x => x.SentMessages)
+                                        .Include(x => x.ReceivedMessages)
+                                        .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken)
+                                        ?? throw new NotFoundException();
 
             if(user.PhotoName != null)
             {
@@ -41,6 +44,10 @@ namespace OnlineChat.Application.UseCases.ToDoList
                 user.PhotoName = null;
             }
             user.IsDeleted = true;
+            foreach(var msg in user.SentMessages.Concat(user.ReceivedMessages))
+            {
+                msg.IsDeleted = true;
+            }
             
             return (await _context.SaveChangesAsync(cancellationToken)) > 0;
         }

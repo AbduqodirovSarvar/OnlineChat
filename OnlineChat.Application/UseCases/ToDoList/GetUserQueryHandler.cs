@@ -28,16 +28,20 @@ namespace OnlineChat.Application.UseCases.ToDoList
             var currentUser = await _context.Users.FirstOrDefaultAsync(x => x.Id == _currentUserService.UserId, cancellationToken)
                                                   ?? throw new NotFoundException("Current user not found");
 
-            if(request.Id != null)
+            if (request.Id != null)
             {
-                return _mapper.Map<UserViewModel>(await _context.Users
-                                                                .Include(x => x.SentMessages)
-                                                                .Include(x => x.ReceivedMessages)
-                                                                .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken) 
-                                                                ?? throw new NotFoundException());
+                var user = await _context.Users
+                                         .Include(x => x.SentMessages)
+                                         .Include(x => x.ReceivedMessages)
+                                         .FirstOrDefaultAsync(x => x.Id == request.Id, cancellationToken)
+                                         ?? throw new NotFoundException();
+
+                var result =  _mapper.Map<UserViewModel>(user);
+
+                return result;
             }
 
-            if(request.Email != null)
+            if (request.Email != null)
             {
                 return _mapper.Map<UserViewModel>(await _context.Users
                                                                 .Include(x => x.SentMessages)

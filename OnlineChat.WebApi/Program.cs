@@ -8,13 +8,11 @@ using OnlineChat.Infrastructure.DbContexts;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Register application and infrastructure services
-builder.Services.DepencyInjectionApplication();
+builder.Services.DepencyInjectionApplication(builder.Configuration);
 builder.Services.DepencyInjectionInfrastructure(builder.Configuration);
 
 builder.Services.AddSignalR();
@@ -65,7 +63,6 @@ builder.Services.AddSwaggerGen(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();

@@ -14,7 +14,8 @@ namespace OnlineChat.Domain.Entities
         public User? Sender { get; set; }
         public Guid ReceiverId { get; set; }
         public User? Receiver { get; set; }
-        public string Msg {  get; set; } = null!;
+        public string EncryptedContent {  get; set; } = null!;
+        public byte[] IV { get; set; } = null!;
         public bool IsSeen { get; set; } = false;
         public DateTime SeenAt { get; set; }
     }

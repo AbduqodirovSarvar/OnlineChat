@@ -13,14 +13,9 @@ using System.Threading.Tasks;
 namespace OnlineChat.Application.ChatActions
 {
     [Authorize]
-    public class ChatHub : Hub
+    public class ChatHub(IMediator mediator) : Hub
     {
-        private readonly IMediator _mediator;
-
-        public ChatHub(IMediator mediator)
-        {
-            _mediator = mediator;
-        }
+        private readonly IMediator _mediator = mediator;
 
         public async Task SendMessage(string toUserId, string message)
         {

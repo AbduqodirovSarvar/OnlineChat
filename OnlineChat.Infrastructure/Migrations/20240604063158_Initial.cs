@@ -37,7 +37,8 @@ namespace OnlineChat.Infrastructure.Migrations
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     SenderId = table.Column<Guid>(type: "uuid", nullable: false),
                     ReceiverId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Msg = table.Column<string>(type: "text", nullable: false),
+                    EncryptedContent = table.Column<string>(type: "text", nullable: false),
+                    IV = table.Column<byte[]>(type: "bytea", nullable: false),
                     IsSeen = table.Column<bool>(type: "boolean", nullable: false),
                     SeenAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
@@ -63,7 +64,7 @@ namespace OnlineChat.Infrastructure.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "CreatedAt", "Email", "FirstName", "IsDeleted", "LastName", "PasswordHash", "PhotoName", "Role" },
-                values: new object[] { new Guid("29588386-2d8c-444b-85f7-c9cfa4cfd413"), new DateTime(2024, 6, 3, 10, 9, 16, 925, DateTimeKind.Utc).AddTicks(7772), "abduqodirovsarvar.2002@gmail.com", "Super Admin", false, "Chat Project's super admin", "rcBCc3ltCI2NxrCDD5XXa530uY+47P+FP0jqqPXB34MFA9AflZM0k3ZvrTzvXxuMb/Cf6CFTMZWqNYGDPO+QjA==", null, 3 });
+                values: new object[] { new Guid("94f859d1-8bdd-4b55-903a-b8a66834769d"), new DateTime(2024, 6, 4, 6, 31, 57, 867, DateTimeKind.Utc).AddTicks(2397), "abduqodirovsarvar.2002@gmail.com", "Super Admin", false, "Chat Project's super admin", "09AsRiFzcUPti8E+269OZCONc6Hla/qt1YjZVAqjqNtvDiD0XNjsj9SjufTU5XOBQ+wrqgNRF08mtc/LcMTDxA==", null, 3 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Messages_ReceiverId",

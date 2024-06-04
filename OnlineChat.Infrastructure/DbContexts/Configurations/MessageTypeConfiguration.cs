@@ -14,6 +14,7 @@ namespace OnlineChat.Infrastructure.DbContexts.Configurations
         public void Configure(EntityTypeBuilder<Message> builder)
         {
             builder.HasKey(x => x.Id);
+            builder.HasQueryFilter(x => !x.IsDeleted);
         }
     }
 }

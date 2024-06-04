@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using OnlineChat.Application.UseCases.ToDoList;
+using OnlineChat.Domain.Exceptions;
 
 namespace OnlineChat.WebApi.Controllers
 {
@@ -18,11 +19,12 @@ namespace OnlineChat.WebApi.Controllers
         {
             try
             {
-                return Ok(await _mediator.Send(query));
+                var response = await _mediator.Send(query);
+                return Ok(response);
             }
             catch (Exception ex)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(ex);
             }
         }
 
@@ -32,6 +34,10 @@ namespace OnlineChat.WebApi.Controllers
             try
             {
                 return Ok(await _mediator.Send(new GetCurrentUserQuery()));
+            }
+            catch (NotFoundException)
+            {
+                return Unauthorized();
             }
             catch (Exception ex)
             {
