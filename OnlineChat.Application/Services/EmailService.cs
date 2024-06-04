@@ -37,7 +37,7 @@ namespace OnlineChat.Application.Services
                 Subject = subject,
             };
 
-            body = $"<p>Email From: {model.Name} ({model.Email})</p><p>Message:</p><p>{model.Message}</p>";
+            body = $"<strong>{model.Subject}:</strong> {model.Message}";
 
             var message = new MailMessage();
             message.To.Add(new MailAddress(model.Email));
@@ -69,7 +69,7 @@ namespace OnlineChat.Application.Services
         public async Task<bool> SendEmailConfirmForResetPassword(string email)
         {
             int confirmationCode = RandomNumberGenerator.GetInt32(10000, 99999);
-            if (await SendEmail(email, "Confirmation Code for reset password", confirmationCode.ToString()))
+            if (await SendEmail(email, "Confirmation code for reset password", confirmationCode.ToString()))
             {
                 ConfirmationCodes.Remove(email);
                 ConfirmationCodes.Add(email, confirmationCode.ToString());
