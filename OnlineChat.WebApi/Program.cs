@@ -76,15 +76,8 @@ app.UseAuthorization();
 using var scope = app.Services.CreateScope();
 var services = scope.ServiceProvider;
 var context = services.GetRequiredService<AppDbContext>();
-try
-{
-    context.Database.Migrate();
-    Console.WriteLine("Migrations applied successfully");
-}
-catch (Exception ex)
-{
-    Console.WriteLine($"Error applying migrations: {ex.Message}");
-}
+
+context.Database.Migrate();
 app.MapControllers();
 app.MapHub<ChatHub>("/chat");
 app.Run();

@@ -12,41 +12,44 @@ namespace OnlineChat.WebApi.Controllers
         private readonly IMediator _mediator = mediator;
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] AuthCommand command)
+        public async Task<IActionResult> LoginAsync([FromBody] AuthCommand command)
         {
             try
             {
-                return Ok(await _mediator.Send(command));
+                var result = await _mediator.Send(command);
+                return Ok(result);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(exception.Message);
             }
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register([FromForm] RegisterCommand command)
+        public async Task<IActionResult> RegisterAsync([FromForm] RegisterCommand command)
         {
             try
             {
-                return Ok(await _mediator.Send(command));
+                var result = await _mediator.Send(command);
+                return Ok(result);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(exception.Message);
             }
         }
 
         [HttpPost("reset-password")]
-        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordCommand command)
+        public async Task<IActionResult> ResetPasswordAsync([FromBody] ResetPasswordCommand command)
         {
             try
             {
-                return Ok(await _mediator.Send(command));
+                var result = await _mediator.Send(command);
+                return Ok(result);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(exception.Message);
             }
         }
 
@@ -63,30 +66,33 @@ namespace OnlineChat.WebApi.Controllers
             }
         }
 
-        [HttpPost("send-confirmation-code-for-reset-password")]
-        public async Task<IActionResult> SendCodeForReset([FromBody] SendConfirmationCodeForResetPasswordCommand command)
+        [HttpPost("send-confirmation-code-for-password-reset")]
+        public async Task<IActionResult> SendConfirmationCodeForPasswordResetAsync([FromBody] SendConfirmationCodeForResetPasswordCommand command)
         {
             try
             {
-                return Ok(await _mediator.Send(command));
+                var result = await _mediator.Send(command);
+                return Ok(result);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(exception.Message);
             }
         }
 
-        [HttpPost("send-confirmation-code-for-check-email")]
-        public async Task<IActionResult> SendCodeForConfirm([FromBody] SendConfirmationCodeCommand command)
+        [HttpPost("send-confirmation-code-to-verify-email")]
+        public async Task<IActionResult> SendConfirmationCodeToVerifyEmailAsync([FromBody] SendConfirmationCodeCommand command)
         {
             try
             {
-                return Ok(await _mediator.Send(command));
+                var result = await _mediator.Send(command);
+                return Ok(result);
             }
-            catch (Exception ex)
+            catch (Exception exception)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(exception.Message);
             }
         }
+
     }
 }
