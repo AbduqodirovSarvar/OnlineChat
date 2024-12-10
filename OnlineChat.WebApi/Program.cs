@@ -20,7 +20,7 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(builder =>
     {
-        builder.WithOrigins("http://localhost:4200")
+        builder.WithOrigins("https://safety-chat.sarvarbekabduqodirov.uz:8443")
                .AllowAnyHeader()
                .AllowAnyMethod()
                .AllowCredentials();
