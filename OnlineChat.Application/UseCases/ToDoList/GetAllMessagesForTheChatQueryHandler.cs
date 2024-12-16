@@ -34,8 +34,7 @@ namespace OnlineChat.Application.UseCases.ToDoList
                                            ?? throw new NotFoundException();
 
             var messages = await _context.Messages
-                                         .Where(x => (x.SenderId == currentUser.Id && x.ReceiverId == user.Id)
-                                         || (x.SenderId == user.Id && x.ReceiverId == currentUser.Id))
+                                         .Where(x => (x.SenderId == currentUser.Id && x.ReceiverId == user.Id) || (x.SenderId == user.Id && x.ReceiverId == currentUser.Id))
                                          .ToListAsync(cancellationToken);
 
             /*return new ChatViewModel()
@@ -43,6 +42,9 @@ namespace OnlineChat.Application.UseCases.ToDoList
                 User = _mapper.Map<UserViewModel>(user),
                 Messages = _mapper.Map<List<MessageViewModel>>(messages)
             };*/
+            user.SentMessages = messages;
+            user.ReceivedMessages = [];
+            
             return _mapper.Map<UserViewModel>(user);
         }
     }
