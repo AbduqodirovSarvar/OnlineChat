@@ -46,8 +46,8 @@ namespace OnlineChat.Application.UseCases.ToDoList
 
             var Ids = sent.Concat(received).Distinct();
             var users = await _context.Users
-                                      .Include(x => x.SentMessages)
-                                      .Include(x => x.ReceivedMessages)
+                                      .Include(x => x.SentMessages.Where(msg => msg.ReceiverId == currentUser.Id))
+                                      .Include(x => x.ReceivedMessages.Where(msg => msg.SenderId == currentUser.Id))
                                       .Where(x => Ids.Contains(x.Id) && !x.IsDeleted)
                                       .Select(user => new
                                       {
