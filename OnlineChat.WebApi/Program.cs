@@ -21,9 +21,10 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(builder =>
     {
-        builder.AllowAnyOrigin()  // Allows all origins
-               .AllowAnyHeader()  // Allows all headers
-               .AllowAnyMethod(); // Allows credentials (use cautiously)
+        builder.WithOrigins("https://safety-chat.sarvarbekabduqodirov.uz:8443")
+               .AllowAnyHeader()
+               .AllowAnyMethod()
+               .AllowCredentials();
     });
 });
 
