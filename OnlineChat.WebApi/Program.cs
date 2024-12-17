@@ -16,16 +16,18 @@ builder.Services.DepencyInjectionApplication(builder.Configuration);
 builder.Services.DepencyInjectionInfrastructure(builder.Configuration);
 
 builder.Services.AddSignalR();
+
 builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(builder =>
     {
-        builder.WithOrigins("http://localhost:4200")
-               .AllowAnyHeader()
-               .AllowAnyMethod()
-               .AllowCredentials();
+        builder.AllowAnyOrigin()  // Allows all origins
+               .AllowAnyHeader()  // Allows all headers
+               .AllowAnyMethod()  // Allows all HTTP methods
+               .AllowCredentials(); // Allows credentials (use cautiously)
     });
 });
+
 
 builder.Services.AddSwaggerGen(options =>
 {
